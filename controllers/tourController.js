@@ -1,9 +1,27 @@
+const { query } = require('express');
 const Tour = require('../models/tourModel');
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find();
+    // A) Filtering
+    // 1) Get the filter data from the URL
+    const queryObj = { ...req.query };
+    // 2) exclude these files from the filter
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
+    let reqString = JSON.stringify(queryObj);
+    reqString = JSON.parse(
+      reqString.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
+    );
+    console.log(reqString);
+    // 3) Build the query
+    const query = Tour.find(reqString);
+    // 4) Call the query
+    const tours = await query;
+
+    // response
     res.status(200).json({
       status: 'success',
+      results: tours.length,
       tours,
     });
   } catch (err) {
