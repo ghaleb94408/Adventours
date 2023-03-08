@@ -1,23 +1,15 @@
 const { query } = require('express');
 const Tour = require('../models/tourModel');
+const APIFeatures = require('../utility/APIFeatures');
 exports.getAllTours = async (req, res) => {
   try {
-    // A) Filtering
-    // 1) Get the filter data from the URL
-    const queryObj = { ...req.query };
-    // 2) exclude these files from the filter
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el) => delete queryObj[el]);
-    let reqString = JSON.stringify(queryObj);
-    reqString = JSON.parse(
-      reqString.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`)
-    );
-    console.log(reqString);
-    // 3) Build the query
-    const query = Tour.find(reqString);
-    // 4) Call the query
-    const tours = await query;
-
+    //  Call the query
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const tours = await features.query;
     // response
     res.status(200).json({
       status: 'success',
@@ -25,6 +17,7 @@ exports.getAllTours = async (req, res) => {
       tours,
     });
   } catch (err) {
+    console.log(err);
     res.status(404).json({
       status: 'Fail',
       message: err,
