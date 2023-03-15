@@ -7,9 +7,11 @@ const app = express();
 app.use(morgan('dev'));
 app.use(express.static(`${__dirname}/public`));
 const toursRouter = require('./routers/toursRoutes');
+const userRouter = require('./routers/usersRoutes');
 // express.json is a middleware that enable us to read json data from the request body
 app.use(express.json());
 app.use('/api/v1/tours', toursRouter);
+app.use('/api/v1/users', userRouter);
 // Handle non-existing routes
 app.all('*', (req, res, next) => {
   const err = new AppError(`The route ${req.originalUrl} does not exist.`, 404);
