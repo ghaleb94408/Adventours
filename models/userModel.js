@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'please provide a password'],
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -33,6 +34,13 @@ const userSchema = new mongoose.Schema({
   },
   photo: String,
 });
+userSchema.methods.authenticateUser = async function (
+  signInPassword,
+  userPassword
+) {
+  const result = await bcrypt.compare(signInPassword, userPassword);
+  return result;
+};
 userSchema.pre('save', async function (next) {
   // 1) If the password is not modified don't execute this function
   if (!this.isModified('password')) return next();
