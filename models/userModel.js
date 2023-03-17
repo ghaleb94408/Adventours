@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
       message: 'The password and the Password confirmation do not match',
     },
   },
+  passwordChangedAt: Date,
   photo: String,
 });
 userSchema.methods.authenticateUser = async function (
@@ -40,6 +41,18 @@ userSchema.methods.authenticateUser = async function (
 ) {
   const result = await bcrypt.compare(signInPassword, userPassword);
   return result;
+};
+userSchema.methods.changedPasswordAfter = function (tokenIat) {
+  if (this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    console.log(changedTimeStamp, tokenIat);
+    console.log(tokenIat < changedTimeStamp);
+    return tokenIat < changedTimeStamp;
+  }
+  return false;
 };
 userSchema.pre('save', async function (next) {
   // 1) If the password is not modified don't execute this function
