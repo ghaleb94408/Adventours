@@ -5,8 +5,8 @@ const User = require('../models/userModel');
 const catchAsync = require('../utility/catchAsync');
 const AppError = require('../utility/appError');
 
-const signJWT = (id) => {
-  const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+const signJWT = async (id) => {
+  const token = await promisify(jwt.sign)({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
   return token;
@@ -19,7 +19,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
     password: newUser.password,
     passwordConfirm: newUser.passwordConfirm,
   });
-  const token = signJWT(user._id);
+  const token = await signJWT(user._id);
   res.status(200).json({
     status: 'Success',
     user,
@@ -43,8 +43,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
       401
     );
   // 4) Sign a JWT Token and send back the response
-  console.log('jwt.sign not async func');
-  const token = signJWT(user._id);
+  const token = await signJWT(user._id);
   res.status(200).json({
     status: 'Success',
     token,
@@ -59,7 +58,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  console.log(token);
   if (!token)
     return next(
       new AppError('You are not logged in! please log in to get access'),
@@ -67,7 +65,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   // 2) Verify token (check if the token hasn't expired and has not been modified)
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded.id);
   // 3) Check if user still exists
   const tokenUser = await User.findById(decoded.id);
   if (!tokenUser) return next(new AppError('This user does not exist', 401));
@@ -81,3 +78,10 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = tokenUser;
   next();
 });
+exports.restrictTo = (allowedArr) => (req, res, next) => {
+  if (!allowedArr.includes(req.user.role))
+    return next(
+      new AppError('You do not have permission to perform this action', 403)
+    );
+  next();
+};

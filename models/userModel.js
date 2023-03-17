@@ -16,6 +16,14 @@ const userSchema = new mongoose.Schema({
     lowerCase: true,
     validate: [validator.isEmail, 'please provide a valid email address'],
   },
+  role: {
+    type: String,
+    enum: {
+      values: ['admin', 'tour-leader', 'tour-guide', 'user'],
+      message: 'user role must be (admin, tour-leader, tour-guide, user)',
+      default: 'user',
+    },
+  },
   password: {
     type: String,
     required: [true, 'please provide a password'],
@@ -48,8 +56,6 @@ userSchema.methods.changedPasswordAfter = function (tokenIat) {
       this.passwordChangedAt.getTime() / 1000,
       10
     );
-    console.log(changedTimeStamp, tokenIat);
-    console.log(tokenIat < changedTimeStamp);
     return tokenIat < changedTimeStamp;
   }
   return false;
