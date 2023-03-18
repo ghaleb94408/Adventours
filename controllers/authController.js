@@ -14,11 +14,22 @@ const signJWT = async (id) => {
   return token;
 };
 const createAndSendToken = async (user, statusCode, res) => {
+  // 1) Sign the token
   const token = await signJWT(user._id);
+  // 2)don't send the user password
   user.password = undefined;
+  // 3) Send the token in an http only cookie
+  res.cookie('jwt', token, {
+    expires: new Date(
+      // current date + expiry date transformed into  hours
+      (Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 60 * 60 * 1000) * 1
+    ),
+    secure: process.env.NODE_ENV !== 'development',
+    httpOnly: true,
+  });
+  // 4) Send response
   res.status(statusCode).json({
     status: 'Success',
-    token,
     data: user,
   });
 };
@@ -41,19 +52,20 @@ exports.signIn = catchAsync(async (req, res, next) => {
     );
   // 2) Check if a user exists with the same email address and that the password is correct
   const user = await User.findOne({ email: signInEmail }).select('+password');
-  const correct = await user.authenticateUser(signInPassword, user.password);
-
-  if (!user || !correct)
+  if (!user)
     return next(
       new AppError('Wrong password or email address, please try again'),
       401
     );
+  const correct = await user.authenticateUser(signInPassword, user.password);
+  if (!correct)
+    return next(
+      new AppError('Wrong password or email address, please try again'),
+      401
+    );
+
   // 4) Sign a JWT Token and send back the response
-  const token = await signJWT(user._id);
-  res.status(200).json({
-    status: 'Success',
-    token,
-  });
+  await createAndSendToken(user, 200, res);
 });
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Get token and check if it exists

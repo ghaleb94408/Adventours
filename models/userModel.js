@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
       default: 'user',
     },
   },
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
   password: {
     type: String,
     required: [true, 'please provide a password'],
@@ -76,6 +81,10 @@ userSchema.methods.createPasswordResetToken = function () {
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password') || this.isNew) return next();
   this.passwordChangedAt = Date.now();
+  next();
+});
+userSchema.pre(/^find/, function (next) {
+  this.find({ active: true });
   next();
 });
 userSchema.pre('save', async function (next) {
