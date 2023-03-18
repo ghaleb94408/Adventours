@@ -6,11 +6,7 @@ const router = express.Router();
 router.route('/tour-stats').get(tourController.getTourStats);
 router
   .route('/')
-  .get(
-    authController.protect,
-    authController.restrictTo(['admin', 'user']),
-    tourController.getAllTours
-  )
+  .get(tourController.getAllTours)
   .post(
     authController.protect,
     authController.restrictTo(['admin', 'tour-leader']),

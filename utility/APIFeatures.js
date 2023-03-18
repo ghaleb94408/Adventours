@@ -3,10 +3,12 @@ class APIFeatures {
     this.query = query;
     this.queryString = queryString;
   }
+
   // A) Filtering
   filter() {
     // 1) Get the filter data from the URL
     const queryObj = { ...this.queryString };
+
     // 2) exclude these files from the filter
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
@@ -19,6 +21,7 @@ class APIFeatures {
     this.query = this.query.find(reqString);
     return this;
   }
+
   // B) Sorting
   sort() {
     if (this.queryString.sort) {
@@ -32,6 +35,7 @@ class APIFeatures {
     }
     return this;
   }
+
   // C) Selecting fields
   limitFields() {
     if (this.queryString.fields) {
@@ -43,6 +47,7 @@ class APIFeatures {
     } else this.query = this.query.select('-__v');
     return this;
   }
+
   // D) Pagination
   paginate() {
     // Get the limit if no limit is given the default is 5

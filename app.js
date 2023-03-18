@@ -1,5 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 const AppError = require('./utility/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routers/usersRoutes');
@@ -7,10 +12,43 @@ const toursRouter = require('./routers/toursRoutes');
 
 const app = express();
 // Middlewares
-app.use(morgan('dev'));
-app.use(express.static(`${__dirname}/public`));
+// Set security http headers
+app.use(helmet());
+// Limit requests from the same IP
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this ip. Please try again later',
+});
+// Logging for development
+if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+app.use('/api', limiter);
 // express.json is a middleware that enable us to read json data from the request body
-app.use(express.json());
+app.use(
+  express.json({
+    limit: '10kb',
+  })
+);
+// Data sanitization against noSQL query injection attacks
+app.use(mongoSanitize());
+// Data sanitization against noSQL XSS attacks
+app.use(xss());
+// prevent Parameter pollution
+app.use(
+  hpp({
+    // Fields that are allowed to be duplicated in the URL
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'difficulty',
+      'price',
+      'maxGroupSize',
+    ],
+  })
+);
+// Serving static files
+app.use(express.static(`${__dirname}/public`));
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', userRouter);
 // Handle non-existing routes
