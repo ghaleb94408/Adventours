@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
@@ -41,13 +42,15 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   photo: String,
 });
 userSchema.methods.authenticateUser = async function (
   signInPassword,
-  userPassword
+  originalUserPassword
 ) {
-  const result = await bcrypt.compare(signInPassword, userPassword);
+  const result = await bcrypt.compare(signInPassword, originalUserPassword);
   return result;
 };
 userSchema.methods.changedPasswordAfter = function (tokenIat) {
@@ -60,6 +63,21 @@ userSchema.methods.changedPasswordAfter = function (tokenIat) {
   }
   return false;
 };
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  return resetToken;
+};
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+  this.passwordChangedAt = Date.now();
+  next();
+});
 userSchema.pre('save', async function (next) {
   // 1) If the password is not modified don't execute this function
   if (!this.isModified('password')) return next();

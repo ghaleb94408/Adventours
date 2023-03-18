@@ -9,4 +9,11 @@ router
   .delete(userController.deleteAllUsers);
 router.post('/signup', authController.signUp);
 router.post('/sign-in', authController.signIn);
+router.post('/forgot-password', authController.forgotPassword);
+router.patch('/reset-password/:token', authController.resetPassword);
+router.patch(
+  '/update-password',
+  authController.protect,
+  authController.updatePassword
+);
 module.exports = router;
