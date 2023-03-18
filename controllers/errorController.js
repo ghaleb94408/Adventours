@@ -37,6 +37,7 @@ const sendErrorProd = (err, res) => {
   } else {
     // Error that are not operational. EX: 3rd party libraries, programming errors
     // Log the error
+    // eslint-disable-next-line no-console
     console.error(err);
     // Send a generic message
     res.status(500).json({

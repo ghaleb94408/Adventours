@@ -7,6 +7,7 @@ class APIFeatures {
   // A) Filtering
   filter() {
     // 1) Get the filter data from the URL
+    // eslint-disable-next-line node/no-unsupported-features/es-syntax
     const queryObj = { ...this.queryString };
 
     // 2) exclude these files from the filter
@@ -41,7 +42,6 @@ class APIFeatures {
     if (this.queryString.fields) {
       // Get Selected fields from the URL query
       const selectedFields = this.queryString.fields.split(',').join(' ');
-      console.log(selectedFields);
       // Add selected fields to the query
       this.query.select(selectedFields);
     } else this.query = this.query.select('-__v');
