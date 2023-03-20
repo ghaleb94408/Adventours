@@ -9,13 +9,13 @@ const reviewSchema = new mongoose.Schema(
     },
     tour: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Tour ',
+      ref: 'Tour',
       required: [true, 'A review must belong to a tour'],
     },
     rating: {
       type: Number,
       max: [5, 'A review rating must be between 1 and 5'],
-      min: [5, 'A review rating must be between 1 and 5'],
+      min: [1, 'A review rating must be between 1 and 5'],
       required: [true, 'A review must have a rating'],
     },
     review: {
@@ -28,9 +28,16 @@ const reviewSchema = new mongoose.Schema(
     },
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    // toJSON: { virtuals: true },
+    // toObject: { virtuals: true },
   }
 );
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'user',
+    select: 'name photo',
+  });
+  next();
+});
 const Review = mongoose.model('Review', reviewSchema);
 module.exports = Review;
