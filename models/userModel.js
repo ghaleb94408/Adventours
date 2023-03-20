@@ -22,8 +22,8 @@ const userSchema = new mongoose.Schema({
     enum: {
       values: ['admin', 'tour-leader', 'tour-guide', 'user'],
       message: 'user role must be (admin, tour-leader, tour-guide, user)',
-      default: 'user',
     },
+    default: 'user',
   },
   active: {
     type: Boolean,
