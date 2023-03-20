@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
+
 // Create Tour Schema
 const tourSchema = new mongoose.Schema(
   {
@@ -10,6 +12,7 @@ const tourSchema = new mongoose.Schema(
       minLength: [10, 'Tour name must be more than 10 charcters'],
       trim: true, //Get rid of extra white space
     },
+    slug: String,
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
@@ -93,10 +96,16 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+tourSchema.index({ slug: 1 });
+tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',
   localField: '_id',
+});
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 tourSchema.pre(/^find/, function (next) {
   this.populate({
