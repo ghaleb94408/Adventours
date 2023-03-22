@@ -34,6 +34,7 @@ const tourSchema = new mongoose.Schema(
       default: 0,
       min: [0, 'Rating can not be less than 0'],
       max: [5, 'Rating can not be more than 5'],
+      set: (val) => Math.round(val * 10) / 10, //round the value to 1 decimal place
     },
     ratingsQuantity: {
       type: Number,
@@ -98,6 +99,7 @@ const tourSchema = new mongoose.Schema(
 );
 tourSchema.index({ slug: 1 });
 tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ startLocation: '2dsphere' });
 tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',

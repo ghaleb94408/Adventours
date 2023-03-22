@@ -14,6 +14,10 @@ router
     authController.restrictTo(['admin', 'lead-guide']),
     tourController.createTour
   );
+router.get(
+  '/tours-within/:distance/center/:latlng/unit/:unit',
+  tourController.getToursWithin
+); //find the tours within x distance from where you live (latlng)
 router
   .route('/:id')
   .get(tourController.getTour)

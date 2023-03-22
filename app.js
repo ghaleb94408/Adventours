@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -5,13 +6,24 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const env = require('dotenv');
+
+env.config({ path: './config.env' });
+
 const AppError = require('./utility/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routers/usersRoutes');
 const toursRouter = require('./routers/toursRoutes');
 const reviewRouter = require('./routers/reviewsRoutes');
+const viewRouter = require('./routers/viewsRoutes');
 
 const app = express();
+
+// Setting view engine (Pug)
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 // Middlewares
 // Set security http headers
 app.use(helmet());
@@ -48,9 +60,8 @@ app.use(
     ],
   })
 );
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
 // API Routers
+app.use('/', viewRouter);
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
