@@ -38,7 +38,7 @@ mongoose.connect(
     // Import tours Psuedo data.
     if (process.argv[2] === '--it') {
       console.log('Importing Tours');
-      Tour.insertMany(toursData);
+      Tour.create(toursData);
       console.log('Tours imported');
     }
     // Delete users documents.
