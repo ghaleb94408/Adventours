@@ -43,7 +43,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
   });
   await createAndSendToken(user, 201, res);
 });
-exports.signIn = catchAsync(async (req, res, next) => {
+exports.login = catchAsync(async (req, res, next) => {
   // 1) Get the email and password
   const { email: signInEmail, password: signInPassword } = req.body;
   if (!signInEmail || !signInPassword)
@@ -75,7 +75,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  }
+  } else if (req.cookies.jwt) token = req.cookies.jwt;
   if (!token)
     return next(
       new AppError('You are not logged in! please log in to get access'),
@@ -94,6 +94,27 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   // Grant access to the route
   req.user = tokenUser;
+  next();
+});
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  // 1) Get token and check if it exists
+  if (req.cookies.jwt) {
+    const token = req.cookies.jwt;
+    // 2) Verify token (check if the token hasn't expired and has not been modified)
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    // 3) Check if user still exists
+    const tokenUser = await User.findById(decoded.id);
+    if (!tokenUser) return next();
+    // 4) Check if user has changed his password after the token was issued
+    if (tokenUser.changedPasswordAfter(decoded.iat))
+      return next(
+        new AppError('User recently changed the password, please log in again'),
+        401
+      );
+    // Grant access to the route
+    res.locals.user = tokenUser;
+    return next();
+  }
   next();
 });
 exports.restrictTo = (allowedArr) => (req, res, next) => {

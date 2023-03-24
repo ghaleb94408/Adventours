@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 const env = require('dotenv');
 
 env.config({ path: './config.env' });
@@ -26,7 +27,19 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 // Middlewares
 // Set security http headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        'script-src': [
+          "'self'",
+          'https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js',
+        ],
+      },
+    },
+  })
+);
 // Limit requests from the same IP
 const limiter = rateLimit({
   max: 100,
@@ -42,6 +55,7 @@ app.use(
     limit: '10kb',
   })
 );
+app.use(cookieParser());
 // Data sanitization against noSQL query injection attacks
 app.use(mongoSanitize());
 // Data sanitization against noSQL XSS attacks
