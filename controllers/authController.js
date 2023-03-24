@@ -67,6 +67,15 @@ exports.login = catchAsync(async (req, res, next) => {
   // 4) Sign a JWT Token and send back the response
   await createAndSendToken(user, 200, res);
 });
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'Logged out', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: 'Success',
+  });
+};
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Get token and check if it exists
   let token;
@@ -96,27 +105,30 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = tokenUser;
   next();
 });
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
-  // 1) Get token and check if it exists
-  if (req.cookies.jwt) {
-    const token = req.cookies.jwt;
-    // 2) Verify token (check if the token hasn't expired and has not been modified)
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    // 3) Check if user still exists
-    const tokenUser = await User.findById(decoded.id);
-    if (!tokenUser) return next();
-    // 4) Check if user has changed his password after the token was issued
-    if (tokenUser.changedPasswordAfter(decoded.iat))
-      return next(
-        new AppError('User recently changed the password, please log in again'),
-        401
+exports.isLoggedIn = async (req, res, next) => {
+  try {
+    // 1) Get token and check if it exists
+    if (req.cookies.jwt) {
+      const token = req.cookies.jwt;
+      // 2) Verify token (check if the token hasn't expired and has not been modified)
+      const decoded = await promisify(jwt.verify)(
+        token,
+        process.env.JWT_SECRET
       );
-    // Grant access to the route
-    res.locals.user = tokenUser;
+      // 3) Check if user still exists
+      const tokenUser = await User.findById(decoded.id);
+      if (!tokenUser) return next();
+      // 4) Check if user has changed his password after the token was issued
+      if (tokenUser.changedPasswordAfter(decoded.iat)) return next();
+      // Grant access to the route
+      res.locals.user = tokenUser;
+      return next();
+    }
+    next();
+  } catch (err) {
     return next();
   }
-  next();
-});
+};
 exports.restrictTo = (allowedArr) => (req, res, next) => {
   if (!allowedArr.includes(req.user.role))
     return next(
