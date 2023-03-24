@@ -1,8 +1,7 @@
 /* eslint-disable */
 import axios from 'axios';
 import { showAlert } from './alerts';
-export const form = document.querySelector('.form');
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
     const result = await axios({
       method: 'POST',
