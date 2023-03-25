@@ -6,19 +6,35 @@ import { updateData } from './updateData';
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const userForm = document.querySelector('.form-user-data');
+const userPasswordForm = document.querySelector('.form-user-settings');
 if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
+  loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    await login(email, password);
+    login(email, password);
   });
 }
 if (userForm)
   userForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    document.querySelector('.btn--save-data').textContent = 'Updating ...';
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    await updateData({ name, email });
+    await updateData({ name, email }, 'Data');
+    document.querySelector('.btn--save-data').textContent = 'Save Settings';
+  });
+if (userPasswordForm)
+  userPasswordForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating ...';
+    const currentPassword = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await updateData(
+      { currentPassword, password, passwordConfirm },
+      'Password'
+    );
+    document.querySelector('.btn--save-password').textContent = 'Save Password';
   });
 if (logoutBtn) logoutBtn.addEventListener('click', logout);

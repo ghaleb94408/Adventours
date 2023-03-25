@@ -12051,7 +12051,7 @@ var logout = /*#__PURE__*/function () {
           if (result.data.status === 'Success') {
             (0, _alerts.showAlert)('success', 'Logged out successfully!');
             window.setTimeout(function () {
-              location.reload(true); //we set the reload flag to true so we have a fresh page from the server and not the cache
+              location.assign('/'); //we set the reload flag to true so we have a fresh page from the server and not the cache
             }, 1000);
           }
           _context2.next = 10;
@@ -12086,39 +12086,42 @@ function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyri
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var updateData = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
-    var result;
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data, type) {
+    var url, result, errString;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          _context.next = 3;
+          if (type === 'Password') url = 'http://127.0.0.1:8000/api/v1/users/update-password';else if (type === 'Data') url = 'http://127.0.0.1:8000/api/v1/users/update-me';
+          _context.next = 4;
           return (0, _axios.default)({
             method: 'PATCH',
-            url: 'http://127.0.0.1:8000/api/v1/users/update-me',
+            url: url,
             data: data
           });
-        case 3:
+        case 4:
           result = _context.sent;
           if (result.data.status === 'Success') {
-            (0, _alerts.showAlert)('success', 'Data updated successfully');
+            (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully"));
             window.setTimeout(function () {
               location.reload(true);
             }, 1000);
           }
-          _context.next = 10;
+          _context.next = 13;
           break;
-        case 7:
-          _context.prev = 7;
+        case 8:
+          _context.prev = 8;
           _context.t0 = _context["catch"](0);
-          (0, _alerts.showAlert)('error', _context.t0.response.data.message.replace('Validation failed: ', '').toUpperCase());
-        case 10:
+          errString = _context.t0.response.data.message.replace('Validation failed: ', '');
+          if (errString.startsWith('User validation failed:')) errString = errString.split(':')[2];
+          (0, _alerts.showAlert)('error', errString.toUpperCase());
+        case 13:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 7]]);
+    }, _callee, null, [[0, 8]]);
   }));
-  return function updateData(_x) {
+  return function updateData(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -12268,44 +12271,62 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var loginForm = document.querySelector('.form--login');
 var logoutBtn = document.querySelector('.nav__el--logout');
 var userForm = document.querySelector('.form-user-data');
+var userPasswordForm = document.querySelector('.form-user-settings');
 if (loginForm) {
-  loginForm.addEventListener('submit', /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var email, password;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
-          case 0:
-            e.preventDefault();
-            email = document.getElementById('email').value;
-            password = document.getElementById('password').value;
-            _context.next = 5;
-            return (0, _login.login)(email, password);
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }, _callee);
-    }));
-    return function (_x) {
-      return _ref.apply(this, arguments);
-    };
-  }());
+  loginForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('email').value;
+    var password = document.getElementById('password').value;
+    (0, _login.login)(email, password);
+  });
 }
 if (userForm) userForm.addEventListener('submit', /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
     var name, email;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          e.preventDefault();
+          document.querySelector('.btn--save-data').textContent = 'Updating ...';
+          name = document.getElementById('name').value;
+          email = document.getElementById('email').value;
+          _context.next = 6;
+          return (0, _updateData.updateData)({
+            name: name,
+            email: email
+          }, 'Data');
+        case 6:
+          document.querySelector('.btn--save-data').textContent = 'Save Settings';
+        case 7:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}());
+if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
+    var currentPassword, password, passwordConfirm;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           e.preventDefault();
-          name = document.getElementById('name').value;
-          email = document.getElementById('email').value;
-          _context2.next = 5;
+          document.querySelector('.btn--save-password').textContent = 'Updating ...';
+          currentPassword = document.getElementById('password-current').value;
+          password = document.getElementById('password').value;
+          passwordConfirm = document.getElementById('password-confirm').value;
+          _context2.next = 7;
           return (0, _updateData.updateData)({
-            name: name,
-            email: email
-          });
-        case 5:
+            currentPassword: currentPassword,
+            password: password,
+            passwordConfirm: passwordConfirm
+          }, 'Password');
+        case 7:
+          document.querySelector('.btn--save-password').textContent = 'Save Password';
+        case 8:
         case "end":
           return _context2.stop();
       }
@@ -12341,7 +12362,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59493" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56326" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

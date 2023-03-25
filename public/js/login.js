@@ -30,7 +30,7 @@ export const logout = async () => {
     if (result.data.status === 'Success') {
       showAlert('success', 'Logged out successfully!');
       window.setTimeout(() => {
-        location.reload(true); //we set the reload flag to true so we have a fresh page from the server and not the cache
+        location.assign('/'); //we set the reload flag to true so we have a fresh page from the server and not the cache
       }, 1000);
     }
   } catch (err) {
