@@ -49,7 +49,10 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
-  photo: String,
+  photo: {
+    type: String,
+    default: 'default.jpg',
+  },
 });
 userSchema.methods.authenticateUser = async function (
   signInPassword,

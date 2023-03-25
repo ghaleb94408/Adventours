@@ -12282,22 +12282,22 @@ if (loginForm) {
 }
 if (userForm) userForm.addEventListener('submit', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-    var name, email;
+    var form;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           e.preventDefault();
           document.querySelector('.btn--save-data').textContent = 'Updating ...';
-          name = document.getElementById('name').value;
-          email = document.getElementById('email').value;
-          _context.next = 6;
-          return (0, _updateData.updateData)({
-            name: name,
-            email: email
-          }, 'Data');
-        case 6:
+          form = new FormData();
+          form.append('name', document.getElementById('name').value);
+          form.append('email', document.getElementById('email').value);
+          form.append('photo', document.getElementById('photo').files[0]);
+          console.log(form);
+          _context.next = 9;
+          return (0, _updateData.updateData)(form, 'Data');
+        case 9:
           document.querySelector('.btn--save-data').textContent = 'Save Settings';
-        case 7:
+        case 10:
         case "end":
           return _context.stop();
       }
@@ -12362,7 +12362,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56326" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50187" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -19,9 +19,11 @@ if (userForm)
   userForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     document.querySelector('.btn--save-data').textContent = 'Updating ...';
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    await updateData({ name, email }, 'Data');
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    await updateData(form, 'Data');
     document.querySelector('.btn--save-data').textContent = 'Save Settings';
   });
 if (userPasswordForm)
