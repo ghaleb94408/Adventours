@@ -18,7 +18,7 @@ mongoose.connect(URL, (err) => {
   else console.log('Connected to DB.');
 });
 const server = app.listen(port, () => {
-  console.log(`App is listening at port 8000 ...`);
+  console.log(`App is listening on port ${port} ...`);
 });
 process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
