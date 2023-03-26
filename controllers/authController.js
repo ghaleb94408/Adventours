@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utility/catchAsync');
 const AppError = require('../utility/appError');
-const sendEmail = require('../utility/email');
+const Email = require('../utility/email');
 
 const signJWT = async (id) => {
   const token = await promisify(jwt.sign)({ id }, process.env.JWT_SECRET, {
@@ -41,6 +41,8 @@ exports.signUp = catchAsync(async (req, res, next) => {
     password: newUser.password,
     passwordConfirm: newUser.passwordConfirm,
   });
+  const url = `${req.protocol}://${req.get('host')}/me`;
+  await new Email(user, url).sendWelcome();
   await createAndSendToken(user, 201, res);
 });
 exports.login = catchAsync(async (req, res, next) => {
@@ -87,7 +89,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) token = req.cookies.jwt;
   if (!token)
     return next(
-      new AppError('You are not logged in! please log in to get access'),
+      new AppError('You are not logged in! please log in to gain access'),
       401
     );
   // 2) Verify token (check if the token hasn't expired and has not been modified)
@@ -151,18 +153,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 2) Generate reset token and URL
   const token = user.createPasswordResetToken();
   await user.save({ validateModifiedOnly: true });
-  const text = `you have requested a password reset please follow this URL ${
-    req.protocol
-  }://${req.get(
+  const url = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/users/reset-password/${token}\nif you didn't request this password reset please just ignore this email`;
+  )}/api/v1/users/reset-password/${token}`;
   // 3) send reset URL to user's email
   try {
-    await sendEmail({
-      email,
-      text,
-      subject: 'Password reset (ONLY VALID FOR 10 MINUTES)',
-    });
+    await new Email(user, url).sendPasswordReset();
     // 4) respond to user
     res.status(200).json({
       status: 'Success',
