@@ -11,7 +11,14 @@ router.get(
   viewController.getOverview
 );
 router.get('/tours/:slug', authController.isLoggedIn, viewController.getTour);
-router.get('/login', authController.isLoggedIn, viewController.login);
+router.get('/login', viewController.login);
+router.get('/signup', viewController.signup);
 router.get('/me', authController.protect, viewController.getAccount);
 router.get('/my-bookings', authController.protect, viewController.getMyTours);
+router.get(
+  '/create-tour',
+  authController.protect,
+  authController.restrictTo(['admin', 'lead-guide']),
+  viewController.createTour
+);
 module.exports = router;
