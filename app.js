@@ -16,6 +16,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const userRouter = require('./routers/usersRoutes');
 const toursRouter = require('./routers/toursRoutes');
 const reviewRouter = require('./routers/reviewsRoutes');
+const bookingRouter = require('./routers/bookingsRoutes');
 const viewRouter = require('./routers/viewsRoutes');
 
 const app = express();
@@ -85,6 +86,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', toursRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 // Handle non-existing routes
 app.all('*', (req, res, next) => {
   const err = new AppError(`The route ${req.originalUrl} does not exist.`, 404);
