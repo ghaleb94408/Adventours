@@ -28,19 +28,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 // Middlewares
 // Set security http headers
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      useDefaults: true,
-      directives: {
-        'script-src': [
-          "'self'",
-          'https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js',
-        ],
-      },
-    },
-  })
-);
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: {
+//       useDefaults: true,
+//       frameGuard: false,
+//       'Cross-Origin-Opener-Policy': false,
+//       directives: {
+//         'default-src': ['*'],
+//         'script-src': [
+//           "'self'",
+//           'https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js',
+//           'https://js.stripe.com/v3/',
+//         ],
+//       },
+//     },
+//   })
+// );
 // Limit requests from the same IP
 const limiter = rateLimit({
   max: 100,
