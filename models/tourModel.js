@@ -44,12 +44,12 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Tour must have a price'],
     },
-    priceDiscount: Number,
     summary: {
       type: String,
-      maxLength: [120, 'Summary must be less than 40 charcters'],
+      maxLength: [120, 'Summary must be less than 120 charcters'],
       minLength: [10, 'Summary must be more than 10 charcters'],
       trim: true, //Get rid of extra white space
+      required: [true, 'A tour must have a summary'],
     },
     description: {
       type: String,
@@ -57,7 +57,8 @@ const tourSchema = new mongoose.Schema(
     },
     imageCover: {
       type: String,
-      required: [true, 'A tur must have a cover image'],
+      required: [true, 'A tour must have a cover image'],
+      default: 'tour-2-cover.jpg',
     },
     images: [String],
     createdAt: {

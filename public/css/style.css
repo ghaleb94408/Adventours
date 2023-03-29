@@ -1222,7 +1222,8 @@ body {
 }
 
 .login-form,
-.signup-form {
+.signup-form,
+.create-tour-form {
   margin: 0 auto;
   max-width: 55rem;
   background-color: #fff;

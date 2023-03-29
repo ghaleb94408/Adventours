@@ -2,6 +2,11 @@ const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
 
+// transporter.verify((err, success) => {
+//   if (err) console.error(err);
+//   else if (success) console.log(success);
+//   else console.log('Your config is correct');
+// });
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
@@ -12,13 +17,22 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      return nodemailer.createTransport({
-        service: 'SendGrid',
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.mailgun.org',
+        port: 587,
         auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD,
+          user: process.env.MAILGUN_USER,
+          pass: process.env.MAILGUN_PASSWORD,
         },
       });
+      return nodemailer.createTransport(transporter);
+      // return nodemailer.createTransport({
+      //   service: 'SendGrid',
+      //   auth: {
+      //     user: process.env.SENDGRID_USERNAME,
+      //     pass: process.env.SENDGRID_PASSWORD,
+      //   },
+      // });
     }
 
     if (process.env.NODE_ENV === 'development') {
@@ -67,7 +81,6 @@ module.exports = class Email {
     );
   }
 };
-
 // const sendEmail = async (options) => {
 // 1) Create transporter
 // const transporter = nodemailer.createTransport({
