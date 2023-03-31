@@ -1348,7 +1348,7 @@ body {
   /* align-items: center; */
 }
 .user--inactive::after {
-  content: "INACTIVE";
+  content: 'INACTIVE';
   position: absolute;
   background-color: #c5807f;
   color: #fff;
@@ -1445,8 +1445,8 @@ body {
   padding-bottom: 0.5rem;
 }
 .user__options__li {
+  position: relative;
   padding: 4px 12px;
-  display: flex;
   justify-content: space-between;
   padding: 1rem 1.2rem;
   margin-top: 1rem;
@@ -1454,9 +1454,13 @@ body {
 .user__options__li a:hover,
 .user__options__li a:active,
 .user__options__li a:visited,
-.user__options__li a:link {
+.user__options__li a {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  justify-content: space-between;
+}
+.user__options__li a {
 }
 .user__options__li p {
   font-size: 1.3rem;

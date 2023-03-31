@@ -1,0 +1,41 @@
+extends base
+mixin user(user)
+  .user(id=`${user.id}` class=`${user.active ? '' : 'user--inactive'}`)
+    img.user-image(src=`/img/users/${user.photo}` alt='user image')
+    .user-details
+      h3.user-details__heading-tretiary #{user.name}
+      p.user-details__email #{user.email}
+      p.user-details__role #{user.role}
+    .options
+      input.toggler(type='checkbox')
+      .options__dots-container
+        .options__dots
+      .user__options
+        ul.user__options__list
+          li.user__options__li.user__options__li--eu
+            a(href=`/manage-users/${user.id}`)
+              p Edit User
+            svg.dropdown__icon.dropdown__icon--edit
+              use(xlink:href='/img/icons.svg#icon-edit-2')
+          li.user__options__li.user__options__li--du(data-id=`${user.id}`)
+            a(href='#')
+              p Delete User
+            svg.dropdown__icon.dropdown__icon--delete
+              use(xlink:href='/img/icons.svg#icon-trash-2')
+block content
+  .main
+    .confirm-delete.hidden
+      .confirm-delete__header
+        svg.confirm-delete__icon.dropdown__icon--delete
+          use(xlink:href='/img/icons.svg#icon-trash-2')
+        p.confirm-delete__header__text Delete User
+      .confirm-delete__body
+        p.confirm-delete__body__text
+          | Deleting the user will permanently remove him from the DB.
+        .confirm-delete__body__buttons
+          a.btn.btn--red.btn--delete(href='#') Yes, Delete User
+          a.btn.btn--white.btn--cancel(href='#') No, Keep User
+    .overlay.hidden
+    .users-container
+      for user in users
+        +user(user)

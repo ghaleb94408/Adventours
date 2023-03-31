@@ -85,7 +85,31 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 exports.getAllUsers = factory.getAll(User);
 exports.getUser = factory.getAll(User);
 exports.getUser = factory.getOne(User);
-exports.updateUser = factory.updateOne(User);
+exports.updateUser = catchAsync(async (req, res, next) => {
+  // 1) return an error if the user try to modify the password in this path
+  if (req.body.password || req.body.passwordConfirm)
+    return next(
+      new AppError('To update your password please use /update-me'),
+      400
+    );
+  // 2) Update user document with filtered data
+  const filteredData = filterObj(req.body, 'email', 'name', 'role');
+  // if the user modified his picture add it to the DB
+  if (req.file) filteredData.photo = req.file.filename;
+  const updatedUser = await User.findByIdAndUpdate(
+    req.params.id,
+    filteredData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  // 3) Send response
+  res.status(201).json({
+    status: 'Success',
+    updatedUser,
+  });
+});
 // Delete the user account from the DB
 exports.deleteUser = factory.deleteOne(User);
 // for development only, Delete later
@@ -93,5 +117,17 @@ exports.deleteAllUsers = catchAsync(async (req, res, next) => {
   await User.deleteMany();
   res.status(203).json({
     status: 'Success',
+  });
+});
+exports.editUserPassword = catchAsync(async (req, res, next) => {
+  // 1) Get the user
+  const user = await User.findById(req.params.id).select('+password');
+  // 3) Update the password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save({ validateModifiedOnly: true });
+  res.status(200).json({
+    status: 'Success',
+    message: 'User password changed successfully',
   });
 });

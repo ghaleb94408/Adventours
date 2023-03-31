@@ -16,6 +16,18 @@ router.get('/signup', viewController.signup);
 router.get('/me', authController.protect, viewController.getAccount);
 router.get('/my-bookings', authController.protect, viewController.getMyTours);
 router.get(
+  '/manage-users',
+  authController.protect,
+  authController.restrictTo(['admin']),
+  viewController.manageUsers
+);
+router.get(
+  '/manage-users/:id',
+  authController.protect,
+  authController.restrictTo(['admin']),
+  viewController.editUser
+);
+router.get(
   '/create-tour',
   authController.protect,
   authController.restrictTo(['admin', 'lead-guide']),

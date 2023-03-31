@@ -11,7 +11,7 @@ block content
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +navItem('#', 'Settings', 'settings', true)
+          +navItem('#', 'Settings', 'settings')
           +navItem('/my-bookings', 'My bookings', 'briefcase')
           +navItem('#', 'My reviews', 'star')
           +navItem('#', 'Billing', 'credit-card')
@@ -20,22 +20,31 @@ block content
             h5.admin-nav__heading Admin
             ul.side-nav
               +navItem('/create-tour', 'Create a Tour', 'map')
-              +navItem('/manage-users', 'Manage users', 'users')
+              +navItem('/manage-users', 'Manage users', 'users', true)
               +navItem('#', 'Manage reviews', 'star')
               +navItem('#', 'Manage bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container
           h2.heading-secondary.ma-bt-md Your account settings
-          form.form.form-user-data
+          form.form.form-user-edit(data-id=`${editUser.id}`)
             .form__group
               label.form__label(for='name') Name
-              input#name.form__input(type='text' value=`${user.name}`, required)
+              input#name.form__input(type='text' value=`${editUser.name}`, required)
             .form__group.ma-bt-md
               label.form__label(for='email') Email address
-              input#email.form__input(type='email' value=`${user.email}`, required)
+              input#email.form__input(type='email' value=`${editUser.email}`, required)
+            .form__group.ma-bt-md
+              .custom-select(style='width:200px;')
+                label.form__label(for='role') Select Role
+                select#role
+                  option(value=`${editUser.role}`) #{editUser.role}
+                  option(value='user') User
+                  option(value='guide') Guide
+                  option(value='lead-guide') Lead-guide
+                  option(value='admin') Admin
             .form__group.form__photo-upload
-              img.form__user-photo(src=`/img/users/${user.photo}` alt=`${user.name}'s photo`)
+              img.form__user-photo(src=`/img/users/${editUser.photo ? editUser.photo : 'default.jpg'}` alt=`${editUser.name}'s photo`)
               input.form__upload(type='file' accept='image/*' id='photo' name='photo') 
               label(for='photo') Choose new photo
             .form__group.right
@@ -43,10 +52,7 @@ block content
         .line &nbsp;
         .user-view__form-container
           h2.heading-secondary.ma-bt-md Password change
-          form.form.form-user-settings
-            .form__group
-              label.form__label(for='password-current') Current password
-              input#password-current.form__input(type='password' placeholder='••••••••', required, minlength='8')
+          form.form.form-user-edit-password(data-id=`${editUser.id}`)
             .form__group
               label.form__label(for='password') New password
               input#password.form__input(type='password' placeholder='••••••••', required, minlength='8')

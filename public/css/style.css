@@ -1324,3 +1324,295 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+/* User Management Page */
+.users-container {
+  display: grid;
+  max-width: 1720px;
+  justify-content: center;
+  align-items: center;
+  /* grid-template-rows: 4rem 4rem 4rem; */
+  /* grid-template-columns: repeat(auto, 1fr); */
+  grid-template-columns: repeat(auto-fill, 40rem);
+  gap: 6rem;
+}
+.user {
+  position: relative;
+  display: flex;
+  height: 13rem;
+  gap: 2rem;
+  background-color: #fefefe;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  padding: 20px 15px;
+  border-radius: 8px;
+  justify-content: space-between;
+}
+.user--inactive::after {
+  content: 'INACTIVE';
+  position: absolute;
+  background-color: #c5807f;
+  color: #fff;
+  padding: 0 3px;
+  letter-spacing: 2px;
+  bottom: 0;
+  right: 0;
+  font-size: 1.4rem;
+  border-bottom-right-radius: 8px;
+}
+.user-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+}
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.user-details__heading-tretiary {
+  font-size: 1.8rem;
+}
+.user-details__email {
+  font-size: 1.4rem;
+}
+.user-details__role {
+  font-size: 1.6rem;
+}
+.options {
+  /* justify-self: end; */
+  margin-left: 5rem;
+  margin-top: 1rem;
+  flex-shrink: 1;
+  position: relative;
+  height: 4rem;
+}
+.toggler {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  z-index: 2;
+}
+.toggler:checked ~ .user__options {
+  opacity: 1;
+  visibility: visible;
+}
+.toggler:hover + .options__dots-container > .options__dots,
+.toggler:hover + .options__dots-container > .options__dots:after,
+.toggler:hover + .options__dots-container > .options__dots:before {
+  background-color: #20bf6b;
+}
+.options__dots {
+  position: relative;
+}
+.options__dots,
+.options__dots::after,
+.options__dots::before {
+  content: '';
+  display: inline-block;
+  height: 0.6rem;
+  width: 0.6rem;
+  border-radius: 100%;
+  background-color: #777;
+  transition: all 0.3s;
+}
+.options__dots::after {
+  position: absolute;
+  top: 1rem;
+}
+.options__dots::before {
+  position: absolute;
+  top: -1rem;
+}
+.user__options {
+  width: 15rem;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  position: absolute;
+  top: -30px;
+  right: 15px;
+  transition: all 0.3s;
+  opacity: 0;
+  visibility: hidden;
+}
+.user__options__list {
+  list-style: none;
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+}
+.user__options__li {
+  padding: 4px 12px;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  margin-top: 1rem;
+}
+.user__options__li a:hover,
+.user__options__li a:active,
+.user__options__li a:visited,
+.user__options__li a:link {
+  text-decoration: none;
+  color: inherit;
+}
+.user__options__li p {
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.user__options__li:hover {
+  cursor: pointer;
+}
+.user__options__li--eu:hover {
+  background-color: #c8cfac;
+}
+.user__options__li--du:hover {
+  background-color: #c5807f;
+}
+.dropdown__icon {
+  height: 2rem;
+  width: 2rem;
+}
+.dropdown__icon--edit {
+  fill: #889e2d;
+}
+.dropdown__icon--delete {
+  height: 2rem;
+  width: 2rem;
+  fill: #a11a1a;
+}
+
+.confirm-delete {
+  position: fixed;
+  width: 60rem;
+  border-radius: 8px;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: stretch;
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  background-color: #f7f7f7;
+}
+.confirm-delete__header {
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 3rem 3rem 1rem 3rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-bottom: 1px solid #e8e8e8;
+}
+.confirm-delete__icon {
+  width: 4rem;
+  height: 4rem;
+}
+.confirm-delete__header__text {
+  font-size: 2.8rem;
+}
+.confirm-delete__body {
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  padding: 1rem 2rem 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.confirm-delete__body__text {
+  font-size: 1.8em;
+}
+.confirm-delete__body__buttons {
+  display: flex;
+  gap: 3rem;
+}
+.btn--red {
+  background-color: #a11a1a;
+  color: #fff;
+}
+.btn.btn--red:focus {
+  background-color: #a11a1a;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transition: all 0.5s;
+}
+.hidden {
+  display: none;
+}
+/* User Edit page */
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
+
+.custom-select select {
+  display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+  background-color: #28b487;
+  font-size: 1.5rem;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+  position: absolute;
+  content: '';
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+  position: absolute;
+  background-color: #28b487;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}

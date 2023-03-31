@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
@@ -55,6 +56,7 @@ const limiter = rateLimit({
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 app.use('/api', limiter);
 // express.json is a middleware that enable us to read json data from the request body
+app.use(cors());
 app.use(
   express.json({
     limit: '10kb',

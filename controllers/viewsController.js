@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utility/catchAsync');
 const AppError = require('../utility/appError');
@@ -56,5 +57,21 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   res.status(200).render('overview', {
     title: 'My Tours',
     tours,
+  });
+});
+exports.manageUsers = catchAsync(async (req, res, next) => {
+  const users = await User.find().select('+active');
+  res.status(200).render('userManagement', {
+    title: 'Manage Users',
+    users,
+  });
+});
+exports.editUser = catchAsync(async (req, res, next) => {
+  const editUser = await User.findById(req.params.id);
+  console.log(editUser);
+  res.status(200).render('userEdit', {
+    title: 'Manage Users',
+    user: req.user,
+    editUser,
   });
 });
