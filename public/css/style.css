@@ -1558,6 +1558,7 @@ body {
 .custom-select {
   position: relative;
   font-family: Arial;
+  font-size: 1.5rem;
 }
 
 .custom-select select {

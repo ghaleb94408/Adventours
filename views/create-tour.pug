@@ -1,48 +1,170 @@
-extends base
+//- extends base
+//- block content
+//-   main.main
+//-     .create-tour-form
+//-       h2.heading-secondary.ma-bt-lg Create a new tour
+//-       form.form.form--create-tour
+//-         .form__group
+//-           label.form__label(for='name') Name
+//-           input#name.form__input(type='text' placeholder='Tour Name', required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='price') Price
+//-           input#price.form__input(type='number' placeholder='$ 399', required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='duration') Duration
+//-           input#duration.form__input(type='number' placeholder='Tour Duration', required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='max-group-size') Max Group Size
+//-           input#max-group-size.form__input(type='number' placeholder='10', required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='difficulty') Difficulty
+//-           select#difficulty.form__input.custom-select( name='difficulty' placeholder='easy', required)
+//-             option(value='easy') easy
+//-             option(value='medium') medium
+//-             option(value='difficult') difficult
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='summary') Summary
+//-           textarea#summary.form__input( placeholder='Summary...', required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='description') Description
+//-           textarea#description.form__input( placeholder='description...', required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='start-dates') Start Date
+//-           input#date.form__input( type='date')
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='start-location-description') Start Location description
+//-           input#start-location-description.form__input( type='text' placeholder='Banff, CAN' required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='start-location-address') Start Location Address
+//-           input#start-location-address.form__input( type='text' placeholder='224 Banff Ave, Banff, AB, Canada' required)
+//-         .form__group.ma-bt-md
+//-           label.form__label(for='start-location-coordinates') Start Location coordinates
+//-           input#start-location-coordinates.form__input( type='text' placeholder='-115.570154, 51.178456' required)
+//-         .form__group.form__photo-upload
+//-           img.form__user-photo(src=`/img/tours/tour-2-cover.jpg` alt=`tour photo`)
+//-           input.form__upload(type='file' accept='image/*' id='photo' name='photo') 
+//-           label(for='photo') Choose new photo
+//-         .form__group
+//-           button.btn.btn--green Create Tour
+extend base
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text} 
+
 block content
   main.main
-    .create-tour-form
-      h2.heading-secondary.ma-bt-lg Create a new tour
-      form.form.form--create-tour
-        .form__group
-          label.form__label(for='name') Name
-          input#name.form__input(type='text' placeholder='Tour Name', required)
-        .form__group.ma-bt-md
-          label.form__label(for='price') Price
-          input#price.form__input(type='number' placeholder='$ 399', required)
-        .form__group.ma-bt-md
-          label.form__label(for='duration') Duration
-          input#duration.form__input(type='number' placeholder='Tour Duration', required)
-        .form__group.ma-bt-md
-          label.form__label(for='max-group-size') Max Group Size
-          input#max-group-size.form__input(type='number' placeholder='10', required)
-        .form__group.ma-bt-md
-          label.form__label(for='difficulty') Difficulty
-          select#difficulty.form__input.custom-select( name='difficulty' placeholder='easy', required)
-            option(value='easy') easy
-            option(value='medium') medium
-            option(value='difficult') difficult
-        .form__group.ma-bt-md
-          label.form__label(for='summary') Summary
-          textarea#summary.form__input( placeholder='Summary...', required)
-        .form__group.ma-bt-md
-          label.form__label(for='description') Description
-          textarea#description.form__input( placeholder='description...', required)
-        .form__group.ma-bt-md
-          label.form__label(for='start-dates') Start Date
-          input#date.form__input( type='date')
-        .form__group.ma-bt-md
-          label.form__label(for='start-location-description') Start Location description
-          input#start-location-description.form__input( type='text' placeholder='Banff, CAN' required)
-        .form__group.ma-bt-md
-          label.form__label(for='start-location-address') Start Location Address
-          input#start-location-address.form__input( type='text' placeholder='224 Banff Ave, Banff, AB, Canada' required)
-        .form__group.ma-bt-md
-          label.form__label(for='start-location-coordinates') Start Location coordinates
-          input#start-location-coordinates.form__input( type='text' placeholder='-115.570154, 51.178456' required)
-        .form__group.form__photo-upload
-          img.form__user-photo(src=`/img/tours/tour-2-cover.jpg` alt=`tour photo`)
-          input.form__upload(type='file' accept='image/*' id='photo' name='photo') 
-          label(for='photo') Choose new photo
-        .form__group
-          button.btn.btn--green Create Tour
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navItem('#', 'Settings', 'settings')
+          +navItem('/my-bookings', 'My bookings', 'briefcase')
+          +navItem('#', 'My reviews', 'star')
+          +navItem('#', 'Billing', 'credit-card')
+        - if (user.role === 'admin')
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +navItem('/create-tour', 'Create a Tour', 'map', true)
+              +navItem('/manage-users', 'Manage users', 'users')
+              +navItem('#', 'Manage reviews', 'star')
+              +navItem('#', 'Manage bookings', 'briefcase')
+
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your account settings
+          form.form.form--create-tour
+            .form__group
+              label.form__label(for='name') Name
+              input#name.form__input(type='text' placeholder='Tour Name' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='duration') Duration
+              input#duration.form__input(type='number' placeholder='15' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='max_group_size') Max Group Size
+              input#max_group_size.form__input(type='number' placeholder='8' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='price') Price
+              input#price.form__input(type='number' placeholder='999' required='required')
+            .form__group.ma-bt-md
+              .custom-select(style='width: 200px')
+                label.form__label(for='difficulty') Select Difficulty
+                select#difficulty
+                  option(value='easy') Easy
+                  option(value='easy') Easy
+                  option(value='medium') Medium
+                  option(value='difficult') Difficult
+              .form__group.ma-bt-md
+                label.form__label(for='description') Description
+                input#description.form__input(type='text' placeholder='Describe the tour with few words....' required='required')
+              .form__group.ma-bt-md
+                label.form__label(for='summary') Summary
+                textarea#summary.form__input(type='text' placeholder='Summarise the tour with few words....' required='required' rows='6')
+              .form__group.ma-bt-md
+                label.form__label(for='date_1') Date 1:
+                input#date_1.form__input(type='date' required='required')
+                label.form__label(for='date_2') Date 2:
+                input#date_2.form__input(type='date' required='required')
+                label.form__label(for='date_3') Date 3:
+                input#date_3.form__input(type='date' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='start-location-coordinates')
+                | Starting Location Coordinates:
+              input#start-location-coordinates.form__input(type='text' placeholder='123.412,-321.423' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='start-location-description')
+                | Starting Location Description:
+              input#start-location-description.form__input(type='text' placeholder='Banff, CAN' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='start-location-address')
+                | Starting Location Address:
+              input#start-location-address.form__input(type='text' placeholder='224 Banff Ave, Banff, AB, Canada' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='location_1_description')
+                | First Location Description:
+              input#location_1_description.form__input(type='text' placeholder='Banff, CAN')
+              label.form__label(for='location_1')
+                | First Location Coordinates:
+              input#location_1.form__input(type='text' placeholder='123.412,-321.423')
+              label.form__label(for='location_1_day')
+                | First Location Days:
+              input#location_1_day.form__input(type='number' placeholder='5')
+            .form__group.ma-bt-md
+              label.form__label(for='location_2_description')
+                | Second Location Description:
+              input#location_2_description.form__input(type='text' placeholder='Banff, CAN')
+              label.form__label(for='location_2')
+                | Second Location Coordinates:
+              input#location_2.form__input(type='text' placeholder='123.412,-321.423')
+              label.form__label(for='location_2_day')
+                | Second Location Day:
+              input#location_2_day.form__input(type='number' placeholder='5')
+            .form__group.ma-bt-md
+              label.form__label(for='location_3_description')
+                | Third Location Description:
+              input#location_3_description.form__input(type='text' placeholder='Banff, CAN')
+              label.form__label(for='location_3')
+                | Third Location Coordinates:
+              input#location_3.form__input(type='text' placeholder='123.412,-321.423')
+              label.form__label(for='location_3_day')
+                | Third Location Day:
+              input#location_3_day.form__input(type='number' placeholder='5')
+            .form__group.form__photo-upload
+              img.form__user-photo(src='/img/users/default.jpg' alt="photo")
+              input#cover_image.form__upload(type='file' accept='image/*' name='photo')
+              label(for='cover_image') Choose Cover Image
+            .line &nbsp;
+
+            .form__group.form__photo-upload
+              img.form__user-photo(src='/img/users/default.jpg' alt="photo")
+              input#image_1.form__upload(type='file' accept='image/*' name='photo')
+              label(for='image_1') Choose a new image for the tour
+              input#image_2.form__upload(type='file' accept='image/*' name='photo')
+              label(for='image_2') Choose a new image for the tour
+              input#image_3.form__upload(type='file' accept='image/*' name='photo')
+              label(for='image_3') Choose a new image for the tour
+            .form__group.right
+              button.btn.btn--small.btn--green.btn--save-data
+                | Create Tour

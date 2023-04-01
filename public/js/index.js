@@ -5,6 +5,7 @@ import { createTour } from './createTour';
 import { updateData } from './updateData';
 import { bookTour } from './stripe';
 import { crossUser } from './usersManagement';
+import { formToJSON } from 'axios';
 // DOM ELEMENTS
 // These ones are for admins edits
 const userEditForm = document.querySelector('.form-user-edit');
@@ -56,65 +57,78 @@ if (createTourForm)
   createTourForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = {};
-    data.form = new FormData();
+    const form = new FormData();
+    const imagesForm = new FormData();
     data.name = document.getElementById('name').value;
     data.price = document.getElementById('price').value;
     data.duration = document.getElementById('duration').value;
-    data.maxGroupSize = document.getElementById('max-group-size').value;
+    data.maxGroupSize = document.getElementById('max_group_size').value;
     data.difficulty = document.getElementById('difficulty').value;
     data.summary = document.getElementById('summary').value;
     data.description = document.getElementById('description').value;
-    data.startDates = [document.getElementById('date').value];
-    data.locationDescription = document.getElementById(
+    data.startDates = [
+      document.getElementById('date_1').value,
+      document.getElementById('date_2').value,
+      document.getElementById('date_3').value,
+    ];
+    data.startLocation = {};
+    data.startLocation.type = 'Point';
+    data.startLocation.coordinates = document
+      .getElementById('start-location-coordinates')
+      .value.split(',');
+    data.startLocation.description = document.getElementById(
       'start-location-description'
     ).value;
-    data.adress = document.getElementById('start-location-address').value;
-    data.coordinates = document.getElementById(
-      'start-location-coordinates'
+    data.startLocation.address = document.getElementById(
+      'start-location-address'
     ).value;
-    data.startLocation = {
-      description: document.getElementById('start-location-description').value,
-      type: 'Point',
-      coordinates: document
-        .getElementById('start-location-coordinates')
-        .value.split(','),
-      address: document.getElementById('start-location-address').value,
-    };
-    data.imageCover = document.getElementById('photo').files[0];
-    createTour(data);
+    data.locations = [
+      {
+        type: 'point',
+        description: document.getElementById('location_1_description').value,
+        day: document.getElementById('location_1_day').value,
+        coordinates: document.getElementById('location_1').value.split(','),
+        type: 'Point',
+      },
+      {
+        type: 'point',
+        description: document.getElementById('location_2_description').value,
+        day: document.getElementById('location_2_day').value,
+        coordinates: document.getElementById('location_2').value.split(','),
+        type: 'Point',
+      },
+      {
+        type: 'point',
+        description: document.getElementById('location_3_description').value,
+        day: document.getElementById('location_3_day').value,
+        coordinates: document.getElementById('location_3').value.split(','),
+        type: 'Point',
+      },
+    ];
+    data.imageCover = document.getElementById('cover_image').files[0];
+    data.images = [
+      document.getElementById('image_1').files[0],
+      document.getElementById('image_2').files[0],
+      document.getElementById('image_3').files[0],
+    ];
+    form.append('name', data.name);
+    form.append('price', data.price);
+    form.append('duration', data.duration);
+    form.append('maxGroupSize', data.maxGroupSize);
+    form.append('difficulty', data.difficulty);
+    form.append('summary', data.summary);
+    form.append('description', data.description);
+    form.append('startDates', JSON.stringify(data.startDates));
+    form.append('startLocation', JSON.stringify(data.startLocation));
+    form.append('locations', JSON.stringify(data.locations));
+    // form.append('imageCover', data.imageCover);
+    imagesForm.append('imageCover', data.imageCover);
+    imagesForm.append('image_1', data.images[0]);
+    imagesForm.append('image_2', data.images[1]);
+    imagesForm.append('image_3', data.images[2]);
+    await createTour(form, imagesForm);
   });
-// if (createTourForm)
-//   createTourForm.addEventListener('submit', async (e) => {
-//     e.preventDefault();
-//     const form = new FormData();
-//     form.append('name', document.getElementById('name').value);
-//     form.append('price', document.getElementById('price').value);
-//     form.append('duration', document.getElementById('duration').value);
-//     form.append(
-//       'maxGroupSize',
-//       document.getElementById('max-group-size').value
-//     );
-//     form.append('difficulty', document.getElementById('difficulty').value);
-//     form.append('summary', document.getElementById('summary').value);
-//     form.append('description', document.getElementById('description').value);
-//     form.append('startDate', document.getElementById('date').value);
-//     form.append(
-//       'locationDescription',
-//       document.getElementById('start-location-description').value
-//     );
-//     form.append(
-//       'adress',
-//       document.getElementById('start-location-address').value
-//     );
-//     form.append(
-//       'coordinates',
-//       document.getElementById('start-location-coordinates').value
-//     );
-//     form.append('imageCover', document.getElementById('photo').files[0]);
-//     console.log(form.get('price'));
-//     console.log(form.get('summary'));
-//     createTour(form);
-//   });
+
 if (userEditForm)
   userEditForm.addEventListener('submit', async (e) => {
     // document.querySelector('.btn--save-data').textContent = 'Updating ...';
