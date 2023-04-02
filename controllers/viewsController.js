@@ -95,3 +95,24 @@ exports.editUser = catchAsync(async (req, res, next) => {
     editUser,
   });
 });
+
+exports.createBooking = (req, res, next) => {
+  res.status(200).render('create-booking', {
+    title: 'Create Booking',
+  });
+};
+exports.manageBookings = catchAsync(async (req, res, next) => {
+  const bookings = await Booking.find();
+  res.status(200).render('manage-bookings', {
+    title: 'Manage Bookings',
+    bookings,
+  });
+});
+exports.editBooking = catchAsync(async (req, res, next) => {
+  const booking = await Booking.findById(req.params.id);
+  if (!booking) return next(new AppError('No booking with that id was found'));
+  res.status(200).render('edit-booking', {
+    title: 'Edit Bookings',
+    booking,
+  });
+});

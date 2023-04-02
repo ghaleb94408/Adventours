@@ -1,0 +1,50 @@
+extend base
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text} 
+
+block content
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navItem('#', 'Settings', 'settings')
+          +navItem('/my-bookings', 'My bookings', 'briefcase')
+          +navItem('#', 'My reviews', 'star')
+          +navItem('#', 'Billing', 'credit-card')
+        - if (user.role === 'admin')
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +navItem('/manage-users', 'Manage Users', 'users')
+              +navItem('/create-tour', 'Create a Tour', 'map')
+              +navItem('/manage-tours', 'Manage Tours', 'map')
+              +navItem('/create-booking', 'Create booking', 'briefcase')
+              +navItem('/manage-bookings', 'Manage bookings', 'briefcase', true)
+
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Edit Booking
+          form.form.form--edit-booking(data-id=`${booking.id}`)
+            .form__group
+              label.form__label(for='user') User Name
+              input#user.form__input(type='text' placeholder='User Name'  value=`${booking.user.name}`)
+            .form__group.ma-bt-md
+              label.form__label(for='tour') Tour Name (slug)
+              input#tour.form__input(type='text' placeholder='the-forest-hiker'  value=`${booking.tour.slug}`)
+            .form__group.ma-bt-md
+              .custom-select(style='width: 200px')
+                label.form__label(for='paid') Paid Booking
+                select#paid
+                  option(value=`${booking.paid}`) #{booking.paid ? 'Paid' : 'Not Paid'}
+                  option(value='true') Paid
+                  option(value='') Not Paid
+            .form__group.ma-bt-md
+              label.form__label(for='price') Price
+              input#price.form__input(type='number' placeholder='999' required='required' value=`${booking.price}`)
+            .form__group.right
+              button.btn.btn--small.btn--green.btn--save-booking-data
+                | Edit Booking  

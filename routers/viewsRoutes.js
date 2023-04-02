@@ -45,4 +45,22 @@ router.get(
   authController.restrictTo(['admin', 'lead-guide']),
   viewController.editTour
 );
+router.get(
+  '/create-booking',
+  authController.protect,
+  authController.restrictTo(['admin', 'lead-guide']),
+  viewController.createBooking
+);
+router.get(
+  '/manage-bookings',
+  authController.protect,
+  authController.restrictTo(['admin', 'lead-guide']),
+  viewController.manageBookings
+);
+router.get(
+  '/manage-bookings/:id',
+  authController.protect,
+  authController.restrictTo(['admin', 'lead-guide']),
+  viewController.editBooking
+);
 module.exports = router;

@@ -2,21 +2,32 @@
 import '@babel/polyfill';
 import { login, logout, signup } from './authenticate';
 import { createTour, deleteTour, editTour } from './manageTours';
+import { createBooking, crossBooking, updateBooking } from './manageBookings';
 import { updateData } from './updateData';
 import { bookTour } from './stripe';
 import { crossUser } from './usersManagement';
 import { formToJSON } from 'axios';
 // DOM ELEMENTS
 // These ones are for admins edits
+// Users Management
 const userEditForm = document.querySelector('.form-user-edit');
 const userPasswordEditForm = document.querySelector('.form-user-edit-password');
+// Tours Management
+const createTourForm = document.querySelector('.form--create-tour');
+const editTourForm = document.querySelector('.form--edit-tour');
+const deleteTourBtn = document.querySelector('.btn--delete-tour');
+const confirmTourDelete = document.querySelector('.btn--tour-confirm-delete');
+// Bookings Management
+const createBookingForm = document.querySelector('.form--create-booking');
+const editBookingForm = document.querySelector('.form--edit-booking');
+const deleteBookingBtn = document.querySelector('.btn--delete-booking');
+const deleteBooking = document.querySelectorAll('.user__options__li--db');
+const editBooking = document.querySelector('.btn--save-booking-data');
 // userEdits
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const userForm = document.querySelector('.form-user-data');
 const signupForm = document.querySelector('.form--signup');
-const createTourForm = document.querySelector('.form--create-tour');
-const editTourForm = document.querySelector('.form--edit-tour');
 const userPasswordForm = document.querySelector('.form-user-settings');
 const bookBtn = document.getElementById('book-tour');
 const confirmDelete = document.querySelector('.confirm-delete');
@@ -24,8 +35,6 @@ const overlay = document.querySelector('.overlay');
 const deleteUser = document.querySelectorAll('.user__options__li--du');
 const cancelBtn = document.querySelector('.btn--cancel');
 const deleteBtn = document.querySelector('.btn--delete');
-const deleteTourBtn = document.querySelector('.btn--delete-tour');
-const confirmTourDelete = document.querySelector('.btn--tour-confirm-delete');
 const toggler = document.querySelector('.toggler');
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
@@ -289,13 +298,57 @@ if (cancelBtn)
 if (deleteBtn)
   deleteBtn.addEventListener('click', async (e) => {
     const id = e.target.dataset.id;
-    document.getElementById(id).remove();
     await crossUser(id);
+    document.getElementById(id).remove();
     deleteBtn.classList.remove(id);
     confirmDelete.classList.add('hidden');
     overlay.classList.add('hidden');
   });
-
+// Bookings Management
+// A) Create booking
+if (createBookingForm)
+  createBookingForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+      tour: document.getElementById('tour').value,
+      user: document.getElementById('user').value,
+      price: document.getElementById('price').value,
+      paid: document.getElementById('paid').value,
+    };
+    console.log(data);
+    createBooking(data);
+  });
+if (deleteBooking)
+  deleteBooking.forEach((de) => {
+    de.addEventListener('click', (e) => {
+      deleteBookingBtn.dataset.id = de.dataset.id;
+      confirmDelete.classList.remove('hidden');
+      overlay.classList.remove('hidden');
+    });
+  });
+// B) Delete booking
+if (deleteBookingBtn)
+  deleteBookingBtn.addEventListener('click', async (e) => {
+    const id = e.target.dataset.id;
+    await crossBooking(id);
+    document.getElementById(id).remove();
+    deleteBookingBtn.classList.remove(id);
+    confirmDelete.classList.add('hidden');
+    overlay.classList.add('hidden');
+  });
+// C) Edit Booking
+if (editBookingForm)
+  editBookingForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = editBookingForm.dataset.id;
+    const data = {
+      tour: document.getElementById('tour').value,
+      user: document.getElementById('user').value,
+      price: document.getElementById('price').value,
+      paid: document.getElementById('paid').value === 'false' ? '' : 'true',
+    };
+    await updateBooking(id, data);
+  });
 // View for select menu
 let x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */

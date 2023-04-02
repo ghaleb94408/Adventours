@@ -1464,13 +1464,16 @@ body {
   text-transform: uppercase;
   font-weight: 500;
 }
-.user__options__li:hover {
+.user__options__li:hover a {
   cursor: pointer;
 }
 .user__options__li--eu:hover {
   background-color: #c8cfac;
 }
 .user__options__li--du:hover {
+  background-color: #c5807f;
+}
+.user__options__li--db:hover {
   background-color: #c5807f;
 }
 .dropdown__icon {

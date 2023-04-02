@@ -10,6 +10,16 @@ router
   .route('/')
   .get(bookingController.getAllBookings)
   .post(bookingController.createBooking);
+router.post(
+  '/create-booking',
+  bookingController.createBookingDataEdit,
+  bookingController.createBooking
+);
+router.patch(
+  '/edit-booking/:id',
+  bookingController.createBookingDataEdit,
+  bookingController.updateBooking
+);
 router
   .route('/:id')
   .get(bookingController.getBooking)

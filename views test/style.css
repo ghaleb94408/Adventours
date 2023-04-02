@@ -1476,6 +1476,9 @@ body {
 .user__options__li--du:hover {
   background-color: #c5807f;
 }
+.user__options__li--db:hover {
+  background-color: #c5807f;
+}
 .dropdown__icon {
   height: 2rem;
   width: 2rem;

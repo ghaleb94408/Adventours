@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../models/tourModel');
+const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const factory = require('./handlerFactory');
 const AppError = require('../utility/appError');
@@ -40,6 +41,17 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   if (!tour || !user || !price) return next();
   await Booking.create({ tour, user, price });
   res.redirect(req.originalUrl.split('?')[0]);
+});
+exports.createBookingDataEdit = catchAsync(async (req, res, next) => {
+  const tour = await Tour.findOne({ slug: req.body.tour });
+  if (!tour) return next(new AppError('No tour was found with this name', 404));
+  req.body.tour = tour.id;
+  const user = await User.findOne({ name: req.body.user });
+  if (!user) return next(new AppError('No user was found with this name', 404));
+  req.body.user = user.id;
+  if (req.body.paid) req.body.paid = true;
+  else req.body.paid = false;
+  next();
 });
 exports.createBooking = factory.createOne(Booking);
 exports.getAllBookings = factory.getAll(Booking);

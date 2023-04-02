@@ -15,10 +15,10 @@ block content
         p.confirm-delete__header__text Delete User
       .confirm-delete__body
         p.confirm-delete__body__text
-          | Deleting the user will permanently remove him from the DB.
+          | Deleting the Tour will permanently remove it from the DB.
         .confirm-delete__body__buttons
           a.btn.btn--red.btn--tour-confirm-delete(href='#' data-id=`${tour.id}`) Yes, Delete User
-          a.btn.btn--white.btn--cancel#no(href='#no') No, Keep User
+          a.btn.btn--white.btn--cancel#no(href='#no') No, Keep Tour
     .overlay.hidden
     .user-view
       nav.user-view__menu
@@ -34,12 +34,12 @@ block content
               +navItem('/manage-users', 'Manage Users', 'users')
               +navItem('/create-tour', 'Create a Tour', 'map')
               +navItem('/manage-tours', 'Manage Tours', 'map', true)
-              +navItem('#', 'Manage reviews', 'star')
-              +navItem('#', 'Manage bookings', 'briefcase')
+              +navItem('/create-booking', 'Create Booking', 'credit-card')
+              +navItem('/manage-bookings', 'Manage bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container
-          h2.heading-secondary.ma-bt-md Your account settings
+          h2.heading-secondary.ma-bt-md Edit Tour
           form.form.form--edit-tour(data-id=`${tour.id}`)
             .form__group
               label.form__label(for='name') Name

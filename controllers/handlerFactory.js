@@ -57,6 +57,7 @@ exports.updateOne = (Model) =>
   });
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    console.log(req.params);
     const doc = await Model.findByIdAndDelete(req.params.id);
     // if no tour is found with the id return an error
     if (!doc) return next(new AppError('No document was found', 404));
