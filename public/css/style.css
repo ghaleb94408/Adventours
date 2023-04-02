@@ -122,6 +122,7 @@ body {
     to(#28b487)
   );
   background-image: linear-gradient(to right, #7dd56f, #28b487);
+  background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   letter-spacing: 0.1rem;
@@ -1616,4 +1617,12 @@ body {
 .select-items div:hover,
 .same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
+}
+.conainer--btn {
+  display: flex;
+  gap: 2rem;
+}
+.btn--delete-tour {
+  background-color: #c5807f;
+  color: #fff;
 }

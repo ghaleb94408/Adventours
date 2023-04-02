@@ -67,8 +67,9 @@ block content
           .admin-nav
             h5.admin-nav__heading Admin
             ul.side-nav
+              +navItem('/manage-users', 'Manage Users', 'users')
               +navItem('/create-tour', 'Create a Tour', 'map', true)
-              +navItem('/manage-users', 'Manage users', 'users')
+              +navItem('/manage-tours', 'Manage Tours', 'map')
               +navItem('#', 'Manage reviews', 'star')
               +navItem('#', 'Manage bookings', 'briefcase')
 
@@ -106,9 +107,9 @@ block content
                 label.form__label(for='date_1') Date 1:
                 input#date_1.form__input(type='date' required='required')
                 label.form__label(for='date_2') Date 2:
-                input#date_2.form__input(type='date' required='required')
+                input#date_2.form__input(type='date')
                 label.form__label(for='date_3') Date 3:
-                input#date_3.form__input(type='date' required='required')
+                input#date_3.form__input(type='date')
             .form__group.ma-bt-md
               label.form__label(for='start-location-coordinates')
                 | Starting Location Coordinates:

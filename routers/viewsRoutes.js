@@ -33,4 +33,16 @@ router.get(
   authController.restrictTo(['admin', 'lead-guide']),
   viewController.createTour
 );
+router.get(
+  '/manage-tours',
+  authController.protect,
+  authController.restrictTo(['admin', 'lead-guide']),
+  viewController.manageTours
+);
+router.get(
+  '/manage-tours/:id',
+  authController.protect,
+  authController.restrictTo(['admin', 'lead-guide']),
+  viewController.editTour
+);
 module.exports = router;

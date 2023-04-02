@@ -29,19 +29,20 @@ exports.uploadTourImages = upload.fields([
 
 exports.resizeTourImages = catchAsync(async (req, res, next) => {
   // 1) Check if images are being updated
-  // console.log(req.body.imageCover);
   if (
     !req.files ||
-    (!req.files.image_1 && !req.files.image_2 && !req.files.image_3)
+    (!req.files.image_1 &&
+      !req.files.image_2 &&
+      !req.files.image_3 &&
+      !req.files.imageCover)
   )
     return next();
   // if the files come from the front end and not the postman call
-  req.files.images = [
-    req.files.image_1[0],
-    req.files.image_2[0],
-    req.files.image_3[0],
-  ];
-  console.log(req.files.images);
+  if (req.files.image_1 || req.files.image_2 || req.files.image_3)
+    req.files.images = [];
+  if (req.files.image_1) req.files.images.push(req.files.image_1[0]);
+  if (req.files.image_2) req.files.images.push(req.files.image_2[0]);
+  if (req.files.image_3) req.files.images.push(req.files.image_3[0]);
   if (!req.files || (!req.files.imageCover && !req.files.images)) return next();
   // A) Cover Image
   // 2) name the file and add it to the request
@@ -73,6 +74,9 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 exports.getAllTours = factory.getAll(Tour);
 exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.editTourCreateData = (req, res, next) => {
+  // This middleware is for data coming from the frontend form and not the API
+  if (typeof req.body.startLocation === 'string')
+    req.body.startLocation = JSON.parse(req.body.startLocation);
   if (typeof req.body.startDates === 'string')
     req.body.startDates = JSON.parse(req.body.startDates);
   if (typeof req.body.locations === 'string')

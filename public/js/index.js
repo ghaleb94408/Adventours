@@ -1,7 +1,7 @@
 /* eslint-disable */
 import '@babel/polyfill';
 import { login, logout, signup } from './authenticate';
-import { createTour } from './createTour';
+import { createTour, deleteTour, editTour } from './manageTours';
 import { updateData } from './updateData';
 import { bookTour } from './stripe';
 import { crossUser } from './usersManagement';
@@ -16,6 +16,7 @@ const logoutBtn = document.querySelector('.nav__el--logout');
 const userForm = document.querySelector('.form-user-data');
 const signupForm = document.querySelector('.form--signup');
 const createTourForm = document.querySelector('.form--create-tour');
+const editTourForm = document.querySelector('.form--edit-tour');
 const userPasswordForm = document.querySelector('.form-user-settings');
 const bookBtn = document.getElementById('book-tour');
 const confirmDelete = document.querySelector('.confirm-delete');
@@ -23,6 +24,8 @@ const overlay = document.querySelector('.overlay');
 const deleteUser = document.querySelectorAll('.user__options__li--du');
 const cancelBtn = document.querySelector('.btn--cancel');
 const deleteBtn = document.querySelector('.btn--delete');
+const deleteTourBtn = document.querySelector('.btn--delete-tour');
+const confirmTourDelete = document.querySelector('.btn--tour-confirm-delete');
 const toggler = document.querySelector('.toggler');
 if (loginForm) {
   loginForm.addEventListener('submit', (e) => {
@@ -53,6 +56,7 @@ if (userForm)
     await updateData(form, 'Data');
     document.querySelector('.btn--save-data').textContent = 'Save Settings';
   });
+// Tour Creation
 if (createTourForm)
   createTourForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -129,15 +133,103 @@ if (createTourForm)
     await createTour(form, imagesForm);
   });
 
+// Tour Edit
+// A) Tour delete
+if (deleteTourBtn)
+  deleteTourBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    confirmDelete.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  });
+if (confirmTourDelete) {
+  confirmTourDelete.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await deleteTour(e.target.dataset.id);
+  });
+}
+// B) Tour Edit
+if (editTourForm)
+  editTourForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {};
+    const form = new FormData();
+    const imagesForm = new FormData();
+    data.name = document.getElementById('name').value;
+    data.price = document.getElementById('price').value;
+    data.duration = document.getElementById('duration').value;
+    data.maxGroupSize = document.getElementById('max_group_size').value;
+    data.difficulty = document.getElementById('difficulty').value;
+    data.summary = document.getElementById('summary').value;
+    data.description = document.getElementById('description').value;
+    data.startDates = [
+      document.getElementById('date_1').value,
+      document.getElementById('date_2').value,
+      document.getElementById('date_3').value,
+    ];
+    data.startLocation = {};
+    data.startLocation.type = 'Point';
+    data.startLocation.coordinates = document
+      .getElementById('start-location-coordinates')
+      .value.split(',');
+    data.startLocation.description = document.getElementById(
+      'start-location-description'
+    ).value;
+    data.startLocation.address = document.getElementById(
+      'start-location-address'
+    ).value;
+    data.locations = [
+      {
+        type: 'point',
+        description: document.getElementById('location_1_description').value,
+        day: document.getElementById('location_1_day').value,
+        coordinates: document.getElementById('location_1').value.split(','),
+        type: 'Point',
+      },
+      {
+        type: 'point',
+        description: document.getElementById('location_2_description').value,
+        day: document.getElementById('location_2_day').value,
+        coordinates: document.getElementById('location_2').value.split(','),
+        type: 'Point',
+      },
+      {
+        type: 'point',
+        description: document.getElementById('location_3_description').value,
+        day: document.getElementById('location_3_day').value,
+        coordinates: document.getElementById('location_3').value.split(','),
+        type: 'Point',
+      },
+    ];
+    data.imageCover = document.getElementById('cover_image').files[0];
+    data.images = [
+      document.getElementById('image_1').files[0],
+      document.getElementById('image_2').files[0],
+      document.getElementById('image_3').files[0],
+    ];
+    form.append('name', data.name);
+    form.append('price', data.price);
+    form.append('duration', data.duration);
+    form.append('maxGroupSize', data.maxGroupSize);
+    form.append('difficulty', data.difficulty);
+    form.append('summary', data.summary);
+    form.append('description', data.description);
+    form.append('startDates', JSON.stringify(data.startDates));
+    form.append('startLocation', JSON.stringify(data.startLocation));
+    form.append('locations', JSON.stringify(data.locations));
+    imagesForm.append('imageCover', data.imageCover);
+    imagesForm.append('image_1', data.images[0]);
+    imagesForm.append('image_2', data.images[1]);
+    imagesForm.append('image_3', data.images[2]);
+    await editTour(form, imagesForm, editTourForm.dataset.id);
+  });
+// for user management page
+if (toggler) {
+  document.querySelector('body').addEventListener('click', (e) => {
+    if (!e.target.classList.contains('toggler')) toggler.checked = false;
+  });
+}
 if (userEditForm)
   userEditForm.addEventListener('submit', async (e) => {
-    // document.querySelector('.btn--save-data').textContent = 'Updating ...';
-    // const form = new FormData();
-    // form.append('name', document.getElementById('name').value);
-    // form.append('email', document.getElementById('email').value);
-    // form.append('photo', document.getElementById('photo').files[0]);
-    // await updateData(form, 'Data');
-    // document.querySelector('.btn--save-data').textContent = 'Save Settings';
     e.preventDefault();
     const form = new FormData();
     const id = userEditForm.dataset.id;
@@ -153,7 +245,6 @@ if (userPasswordEditForm)
     const id = userPasswordEditForm.dataset.id;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
-    console.log(password, passwordConfirm);
     await updateData({ password, passwordConfirm }, 'adminPassword', id);
   });
 if (userPasswordForm)
@@ -172,7 +263,6 @@ if (userPasswordForm)
 if (bookBtn)
   bookBtn.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...';
-    console.log(e.target.dataset.tourid);
     const { tourid } = e.target.dataset;
     bookTour(tourid);
   });
@@ -200,18 +290,11 @@ if (deleteBtn)
   deleteBtn.addEventListener('click', async (e) => {
     const id = e.target.dataset.id;
     document.getElementById(id).remove();
-    console.log('deleting user...');
     await crossUser(id);
-    console.log('user deleted 👍');
     deleteBtn.classList.remove(id);
     confirmDelete.classList.add('hidden');
     overlay.classList.add('hidden');
   });
-if (toggler) {
-  document.querySelector('body').addEventListener('click', (e) => {
-    if (!e.target.classList.contains('toggler')) toggler.checked = false;
-  });
-}
 
 // View for select menu
 let x, i, j, l, ll, selElmnt, a, b, c;

@@ -13,6 +13,27 @@ exports.getOverview = catchAsync(async (req, res) => {
     tours,
   });
 });
+exports.manageTours = catchAsync(async (req, res) => {
+  // 1) Get tours data from DB
+  const tours = await Tour.find();
+  // 3) Render Template
+  res.status(200).render('tourManagement', {
+    title: 'Manage Tours',
+    tours,
+  });
+});
+exports.editTour = catchAsync(async (req, res, next) => {
+  // 1) Get tours data from DB
+  const tour = await Tour.findById(req.params.id);
+  if (!tour) {
+    return next(new AppError('There is no tour with that name.', 404));
+  }
+  // 3) Render Template
+  res.status(200).render('edit-tour', {
+    title: 'Edit Tour',
+    tour,
+  });
+});
 exports.getTour = catchAsync(async (req, res, next) => {
   // 1) Get tour data from DB
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
@@ -68,7 +89,6 @@ exports.manageUsers = catchAsync(async (req, res, next) => {
 });
 exports.editUser = catchAsync(async (req, res, next) => {
   const editUser = await User.findById(req.params.id);
-  console.log(editUser);
   res.status(200).render('userEdit', {
     title: 'Manage Users',
     user: req.user,
