@@ -62,13 +62,26 @@ block content
     each img, i in tour.images
       .picture-box
         img.picture-box__img(src=`/img/tours/${img}` alt=`${tour.name} Tour ${i + 1}` class=`picture-box__img--${i + 1}`)
-  section.section-map
-    #map
 
   section.section-reviews
     .reviews
       each review in tour.reviews
         +reviewCard(review)
+  section.section-map
+    if(user)
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Add Review
+          form.form.form--create-review(data-tour_id=`${tour.id}` data-user_id = `${user.id}`)
+            .form__group
+              label.form__label(for='review') Review
+              textarea#review.form__input(type='text' placeholder='Review...'  rows=5 required=true)
+            .form__group.ma-bt-md
+              label.form__label(for='rating') Rating
+              input#rating.form__input(type='number' placeholder='5' max=5 min=1 required=true)
+            .form__group.right
+              button.btn.btn--small.btn--green.btn--save-review-data
+                | Create Review 
 
   section.section-cta
     .cta

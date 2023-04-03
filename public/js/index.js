@@ -7,7 +7,7 @@ import { updateData } from './updateData';
 import { bookTour } from './stripe';
 import { crossUser } from './usersManagement';
 import { formToJSON } from 'axios';
-import { crossReview, updateReview } from './manageReviews';
+import { crossReview, updateReview, createReview } from './manageReviews';
 // DOM ELEMENTS
 // These ones are for admins edits
 // Users Management
@@ -28,6 +28,7 @@ const editBooking = document.querySelector('.btn--save-booking-data');
 const deleteReview = document.querySelectorAll('.delete-container');
 const deleteReviewBtn = document.querySelector('.btn--delete-review');
 const editReviewForm = document.querySelector('.form--edit-review');
+const createReviewForm = document.querySelector('.form--create-review');
 // userEdits
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
@@ -383,7 +384,16 @@ if (editReviewForm)
     const rating = document.getElementById('rating').value;
     await updateReview(id, { review, rating });
   });
-
+// Create review
+if (createReviewForm)
+  createReviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const tour = createReviewForm.dataset.tour_id;
+    const user = createReviewForm.dataset.user_id;
+    const review = document.getElementById('review').value;
+    const rating = document.getElementById('rating').value;
+    await createReview({ tour, user, review, rating });
+  });
 // View for select menu
 let x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */

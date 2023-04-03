@@ -34,7 +34,7 @@ block content
               textarea#review.form__input(type='text' placeholder='Review...'  rows=5) #{review.review}
             .form__group.ma-bt-md
               label.form__label(for='rating') Rating
-              input#rating.form__input(type='number' placeholder='4'  value=`${review.rating}`)
+              input#rating.form__input(type='number' placeholder='4'  value=`${review.rating}` max=5 min=1)
             .form__group.right
               button.btn.btn--small.btn--green.btn--save-review-data
                 | Edit Review  
