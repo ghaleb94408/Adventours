@@ -1,0 +1,40 @@
+extend base
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text} 
+
+block content
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +navItem('#', 'Settings', 'settings')
+          +navItem('/my-bookings', 'My bookings', 'briefcase')
+          +navItem('/my-reviews', 'My reviews', 'star', true)
+          +navItem('#', 'Billing', 'credit-card')
+        - if (user.role === 'admin')
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +navItem('/manage-users', 'Manage Users', 'users')
+              +navItem('/create-tour', 'Create a Tour', 'map')
+              +navItem('/manage-tours', 'Manage Tours', 'map')
+              +navItem('/create-booking', 'Create booking', 'briefcase')
+              +navItem('/manage-bookings', 'Manage bookings', 'briefcase')
+
+      .user-view__content
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Edit Review
+          form.form.form--edit-review(data-id=`${review.id}`)
+            .form__group
+              label.form__label(for='review') Review
+              textarea#review.form__input(type='text' placeholder='Review...'  rows=5) #{review.review}
+            .form__group.ma-bt-md
+              label.form__label(for='rating') Rating
+              input#rating.form__input(type='number' placeholder='4'  value=`${review.rating}`)
+            .form__group.right
+              button.btn.btn--small.btn--green.btn--save-review-data
+                | Edit Review  

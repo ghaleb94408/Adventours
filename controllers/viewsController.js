@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utility/catchAsync');
 const AppError = require('../utility/appError');
@@ -114,5 +115,22 @@ exports.editBooking = catchAsync(async (req, res, next) => {
   res.status(200).render('edit-booking', {
     title: 'Edit Bookings',
     booking,
+  });
+});
+exports.getMyReviews = catchAsync(async (req, res, next) => {
+  const reviews = await Review.find({ user: req.user.id });
+  console.log(!reviews[0]);
+  if (!reviews[0]) return next(new AppError('You have not reviewed any tour'));
+  res.status(200).render('my-reviews', {
+    title: 'My Reviews',
+    reviews,
+  });
+});
+exports.editReview = catchAsync(async (req, res, next) => {
+  const review = await Review.findById(req.params.id);
+  if (!review) return next(new AppError('no review was found', 404));
+  res.status(200).render('edit-review', {
+    title: 'Edit Reviews',
+    review,
   });
 });

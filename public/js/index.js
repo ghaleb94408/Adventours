@@ -7,6 +7,7 @@ import { updateData } from './updateData';
 import { bookTour } from './stripe';
 import { crossUser } from './usersManagement';
 import { formToJSON } from 'axios';
+import { crossReview, updateReview } from './manageReviews';
 // DOM ELEMENTS
 // These ones are for admins edits
 // Users Management
@@ -23,6 +24,10 @@ const editBookingForm = document.querySelector('.form--edit-booking');
 const deleteBookingBtn = document.querySelector('.btn--delete-booking');
 const deleteBooking = document.querySelectorAll('.user__options__li--db');
 const editBooking = document.querySelector('.btn--save-booking-data');
+// Reviews Management
+const deleteReview = document.querySelectorAll('.delete-container');
+const deleteReviewBtn = document.querySelector('.btn--delete-review');
+const editReviewForm = document.querySelector('.form--edit-review');
 // userEdits
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
@@ -349,6 +354,36 @@ if (editBookingForm)
     };
     await updateBooking(id, data);
   });
+// Reviews management
+// A) Delete Review
+if (deleteReview)
+  deleteReview.forEach((de) => {
+    de.addEventListener('click', (e) => {
+      console.log('hello');
+      deleteReviewBtn.dataset.id = de.dataset.id;
+      confirmDelete.classList.remove('hidden');
+      overlay.classList.remove('hidden');
+    });
+  });
+if (deleteReviewBtn)
+  deleteReviewBtn.addEventListener('click', async (e) => {
+    const id = e.target.dataset.id;
+    await crossReview(id);
+    document.getElementById(id).remove();
+    deleteReviewBtn.classList.remove(id);
+    confirmDelete.classList.add('hidden');
+    overlay.classList.add('hidden');
+  });
+// Edit Reveiw
+if (editReviewForm)
+  editReviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = editReviewForm.dataset.id;
+    const review = document.getElementById('review').value;
+    const rating = document.getElementById('rating').value;
+    await updateReview(id, { review, rating });
+  });
+
 // View for select menu
 let x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */

@@ -63,4 +63,10 @@ router.get(
   authController.restrictTo(['admin', 'lead-guide']),
   viewController.editBooking
 );
+router.get('/my-reviews', authController.protect, viewController.getMyReviews);
+router.get(
+  '/my-reviews/:id',
+  authController.protect,
+  viewController.editReview
+);
 module.exports = router;

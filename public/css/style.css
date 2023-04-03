@@ -1629,3 +1629,44 @@ body {
   background-color: #c5807f;
   color: #fff;
 }
+.actions-container {
+  width: 100%;
+  /* padding: 3px 10px; */
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+.delete-container:hover {
+  cursor: pointer;
+}
+.edit-container:hover {
+  cursor: pointer;
+}
+.delete-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: #c5807f;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 1.7rem;
+}
+.edit-container {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: #c8cfac;
+  color: #fff;
+  font-size: 1.7rem;
+}
+.edit-container a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* .review-edit {
+  width: 10rem;
+}
+.review-delete {
+  width: 10rem;
+} */

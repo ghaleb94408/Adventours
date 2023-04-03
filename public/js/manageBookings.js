@@ -10,7 +10,7 @@ export const createBooking = async (data) => {
       data: data,
     });
     if (result.data.status === 'Success') {
-      showAlert('success', 'Tour Created Successfully!');
+      showAlert('success', 'Booking Created Successfully!');
       window.setTimeout(() => {
         location.assign(`/manage-bookings`);
       }, 1000);
@@ -24,7 +24,7 @@ export const crossBooking = async (id) => {
     const result = await axios.delete(
       `http://127.0.0.1:8000/api/v1/bookings/${id}`
     );
-    showAlert('success', 'Booking deleted succcessfully');
+    if (result) showAlert('success', 'Booking deleted succcessfully');
   } catch (err) {
     showAlert('error', err.response.data.message);
   }
@@ -35,7 +35,12 @@ export const updateBooking = async (id, data) => {
       `http://127.0.0.1:8000/api/v1/bookings/edit-booking/${id}`,
       data
     );
-    showAlert('success', 'Booking deleted succcessfully');
+    if (result.data.status === 'Success') {
+      showAlert('success', 'Booking updated Successfully!');
+      window.setTimeout(() => {
+        location.reload(true);
+      }, 1000);
+    }
   } catch (err) {
     showAlert('error', err.response.data.message);
   }
