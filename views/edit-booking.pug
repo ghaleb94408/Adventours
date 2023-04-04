@@ -30,8 +30,8 @@ block content
           h2.heading-secondary.ma-bt-md Edit Booking
           form.form.form--edit-booking(data-id=`${booking.id}`)
             .form__group
-              label.form__label(for='user') User Name
-              input#user.form__input(type='text' placeholder='User Name'  value=`${booking.user.name}`)
+              label.form__label(for='user') User Email
+              input#user.form__input(type='email' placeholder='example@adve.io'  value=`${booking.user.email}`)
             .form__group.ma-bt-md
               label.form__label(for='tour') Tour Name (slug)
               input#tour.form__input(type='text' placeholder='the-forest-hiker'  value=`${booking.tour.slug}`)

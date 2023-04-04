@@ -5,7 +5,7 @@ const bookingCotroller = require('../controllers/bookingController');
 
 const router = express.Router();
 router.get(
-  '/',
+  '/overview',
   bookingCotroller.createBookingCheckout,
   authController.isLoggedIn,
   viewController.getOverview
@@ -64,6 +64,7 @@ router.get(
   viewController.editBooking
 );
 router.get('/my-reviews', authController.protect, viewController.getMyReviews);
+router.get('/', viewController.getHome);
 router.get(
   '/my-reviews/:id',
   authController.protect,

@@ -12014,7 +12014,7 @@ var login = /*#__PURE__*/function () {
           if (result.data.status === 'Success') {
             (0, _alerts.showAlert)('success', 'Logged in successfully!');
             window.setTimeout(function () {
-              location.assign('/');
+              location.assign('/overview');
             }, 1000);
           }
           _context.next = 10;
@@ -12052,7 +12052,7 @@ var signup = /*#__PURE__*/function () {
           if (result.data.status === 'Success') {
             (0, _alerts.showAlert)('success', 'Logged in successfully!');
             window.setTimeout(function () {
-              location.assign('/');
+              location.assign('/overview');
             }, 1000);
           }
           _context2.next = 10;
@@ -12089,7 +12089,7 @@ var logout = /*#__PURE__*/function () {
           if (result.data.status === 'Success') {
             (0, _alerts.showAlert)('success', 'Logged out successfully!');
             window.setTimeout(function () {
-              location.assign('/'); //we set the reload flag to true so we have a fresh page from the server and not the cache
+              location.assign('/overview'); //we set the reload flag to true so we have a fresh page from the server and not the cache
             }, 1000);
           }
           _context3.next = 10;
@@ -13435,7 +13435,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57327" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64639" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

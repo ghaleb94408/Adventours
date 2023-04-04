@@ -8,57 +8,132 @@ mixin navItem(link, text, icon, active)
 
 block content
   main.main
+    .confirm-delete.hidden
+      .confirm-delete__header
+        svg.confirm-delete__icon.dropdown__icon--delete
+          use(xlink:href='/img/icons.svg#icon-trash-2')
+        p.confirm-delete__header__text Delete User
+      .confirm-delete__body
+        p.confirm-delete__body__text
+          | Deleting the Tour will permanently remove it from the DB.
+        .confirm-delete__body__buttons
+          a.btn.btn--red.btn--tour-confirm-delete(href='#' data-id=`${tour.id}`) Yes, Delete User
+          a.btn.btn--white.btn--cancel#no(href='#no') No, Keep Tour
+    .overlay.hidden
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +navItem('/me', 'Settings', 'settings')
+          +navItem('#', 'Settings', 'settings')
           +navItem('/my-bookings', 'My bookings', 'briefcase')
-          +navItem('/my-reviews', 'My reviews', 'star')
+          +navItem('#', 'My reviews', 'star')
           +navItem('#', 'Billing', 'credit-card')
         - if (user.role === 'admin')
           .admin-nav
             h5.admin-nav__heading Admin
             ul.side-nav
-              +navItem('/manage-users', 'Manage users', 'users', true)
+              +navItem('/manage-users', 'Manage Users', 'users')
               +navItem('/create-tour', 'Create a Tour', 'map')
-              +navItem('/manage-tours', 'Manage Tours', 'map')
+              +navItem('/manage-tours', 'Manage Tours', 'map', true)
               +navItem('/create-booking', 'Create Booking', 'credit-card')
               +navItem('/manage-bookings', 'Manage bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container
-          h2.heading-secondary.ma-bt-md Edit User
-          form.form.form-user-edit(data-id=`${editUser.id}`)
+          h2.heading-secondary.ma-bt-md Edit Tour
+          form.form.form--edit-tour(data-id=`${tour.id}`)
             .form__group
               label.form__label(for='name') Name
-              input#name.form__input(type='text' value=`${editUser.name}`, required)
+              input#name.form__input(type='text' placeholder='Tour Name'  value=`${tour.name}`)
             .form__group.ma-bt-md
-              label.form__label(for='email') Email address
-              input#email.form__input(type='email' value=`${editUser.email}`, required)
+              label.form__label(for='duration') Duration
+              input#duration.form__input(type='number' placeholder='15'  value=`${tour.duration}`)
             .form__group.ma-bt-md
-              .custom-select(style='width:200px;')
-                label.form__label(for='role') Select Role
-                select#role
-                  option(value=`${editUser.role}`) #{editUser.role}
-                  option(value='user') User
-                  option(value='guide') Guide
-                  option(value='lead-guide') Lead-guide
-                  option(value='admin') Admin
+              label.form__label(for='max_group_size') Max Group Size
+              input#max_group_size.form__input(type='number' placeholder='8'  value=`${tour.maxGroupSize}`)
+            .form__group.ma-bt-md
+              label.form__label(for='price') Price
+              input#price.form__input(type='number' placeholder='999'  value=`${tour.price}`)
+            .form__group.ma-bt-md
+              .custom-select(style='width: 200px')
+                label.form__label(for='difficulty') Select Difficulty
+                select#difficulty
+                  option(value=`${tour.difficulty}`) #{tour.difficulty}
+                  option(value='easy') Easy
+                  option(value='medium') Medium
+                  option(value='difficult') Difficult
+              .form__group.ma-bt-md
+                label.form__label(for='description') Description
+                input#description.form__input(type='text' placeholder='Describe the tour with few words....'  value=`${tour.description}`)
+              .form__group.ma-bt-md
+                label.form__label(for='summary') Summary
+                textarea#summary.form__input(type='text' placeholder='Summarise the tour with few words....' rows='6')= `${tour.summary}`
+              .form__group.ma-bt-md
+                label.form__label(for='date_1') Date 1:
+                input#date_1.form__input(type='date'  value=`${tour.startDates[0] ? tour.startDates[0].toISOString().split('T')[0]  : ''}`)
+                label.form__label(for='date_2') Date 2:
+                input#date_2.form__input(type='date' value=`${tour.startDates[1] ? tour.startDates[1].toISOString().split('T')[0] : ''}`)
+                label.form__label(for='date_3') Date 3:
+                input#date_3.form__input(type='date' value=`${tour.startDates[2] ? tour.startDates[2].toISOString().split('T')[0]: ''}`)
+            .form__group.ma-bt-md
+              label.form__label(for='start-location-coordinates')
+                | Starting Location Coordinates:
+              input#start-location-coordinates.form__input(type='text' placeholder='123.412,-321.423'  value=`${tour.startLocation.coordinates}`)
+            .form__group.ma-bt-md
+              label.form__label(for='start-location-description')
+                | Starting Location Description:
+              input#start-location-description.form__input(type='text' placeholder='Banff, CAN'  value=`${tour.startLocation.description}`)
+            .form__group.ma-bt-md
+              label.form__label(for='start-location-address')
+                | Starting Location Address:
+              input#start-location-address.form__input(type='text' placeholder='224 Banff Ave, Banff, AB, Canada'  value=`${tour.startLocation.address}`)
+            .form__group.ma-bt-md
+              label.form__label(for='location_1_description')
+                | First Location Description:
+              input#location_1_description.form__input(type='text' placeholder='Banff, CAN' value=`${tour.locations[0] ? tour.locations[0].description : ""}`)
+              label.form__label(for='location_1')
+                | First Location Coordinates:
+              input#location_1.form__input(type='text' placeholder='123.412,-321.423' value=`${tour.locations[0] ? tour.locations[0].coordinates : ""}`)
+              label.form__label(for='location_1_day')
+                | First Location Days:
+              input#location_1_day.form__input(type='number' placeholder='5' value=`${tour.locations[0] ? tour.locations[0].day : ""}`)
+            .form__group.ma-bt-md
+              label.form__label(for='location_2_description')
+                | Second Location Description:
+              input#location_2_description.form__input(type='text' placeholder='Banff, CAN' value=`${tour.locations[1] ? tour.locations[1].description : ""}`)
+              label.form__label(for='location_2')
+                | Second Location Coordinates:
+              input#location_2.form__input(type='text' placeholder='123.412,-321.423' value=`${tour.locations[1] ? tour.locations[1].coordinates : ""}`)
+              label.form__label(for='location_2_day')
+                | Second Location Day:
+              input#location_2_day.form__input(type='number' placeholder='5' value=`${tour.locations[1] ? tour.locations[1].day : ""}`)
+            .form__group.ma-bt-md
+              label.form__label(for='location_3_description')
+                | Third Location Description:
+              input#location_3_description.form__input(type='text' placeholder='Banff, CAN' value=`${tour.locations[2] ? tour.locations[2].description : ""}`)
+              label.form__label(for='location_3')
+                | Third Location Coordinates:
+              input#location_3.form__input(type='text' placeholder='123.412,-321.423' value=`${tour.locations[2] ? tour.locations[2].coordinates : ""}`)
+              label.form__label(for='location_3_day')
+                | Third Location Day:
+              input#location_3_day.form__input(type='number' placeholder='5' value=`${tour.locations[2] ? tour.locations[2].day : ""}`)
             .form__group.form__photo-upload
-              img.form__user-photo(src=`/img/users/${editUser.photo ? editUser.photo : 'default.jpg'}` alt=`${editUser.name}'s photo`)
-              input.form__upload(type='file' accept='image/*' id='photo' name='photo') 
-              label(for='photo') Choose new photo
+              img.form__user-photo(src='/img/users/default.jpg' alt="photo")
+              input#cover_image.form__upload(type='file' accept='image/*' name='photo')
+              label(for='cover_image') Choose Cover Image
+            .line &nbsp;
+
+            .form__group.form__photo-upload
+              img.form__user-photo(src='/img/users/default.jpg' alt="photo")
+              input#image_1.form__upload(type='file' accept='image/*' name='photo')
+              label(for='image_1') Choose a new image for the tour
+              input#image_2.form__upload(type='file' accept='image/*' name='photo')
+              label(for='image_2') Choose a new image for the tour
+              input#image_3.form__upload(type='file' accept='image/*' name='photo')
+              label(for='image_3') Choose a new image for the tour
+            .line &nbsp;
             .form__group.right
-              button.btn.btn--small.btn--green.btn--save-data Save settings
-        .line &nbsp;
-        .user-view__form-container
-          h2.heading-secondary.ma-bt-md Password change
-          form.form.form-user-edit-password(data-id=`${editUser.id}`)
-            .form__group
-              label.form__label(for='password') New password
-              input#password.form__input(type='password' placeholder='••••••••', required, minlength='8')
-            .form__group.ma-bt-lg
-              label.form__label(for='password-confirm') Confirm password
-              input#password-confirm.form__input(type='password' placeholder='••••••••', required, minlength='8')
-            .form__group.right
-              button.btn.btn--small.btn--green.btn--save-password Save password
+              .conainer--btn
+                button.btn.btn--small.btn--green.btn--save-data
+                  | Edit Tour
+                button.btn.btn--small.btn--delete-tour(data-id=`${tour.id}`)
+                  | Delete Tour

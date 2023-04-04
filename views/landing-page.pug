@@ -1,0 +1,115 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible" content="ie=edge")
+    link(href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet")
+    link(rel="stylesheet" href="css/icon-font.css")
+    link(rel="stylesheet" href="css/stylelanding.css")
+    link(rel="shortcut icon" type="image/png" href="img/favicon.png")
+    title Adventours | Exciting tours for adventurous people
+  body
+
+    header.header
+      div(class="header__logo-box")
+        img(src="img/logo-white.png" alt="Logo" class="header__logo")
+      div(class="header__text-box")
+        h1.heading-primary
+          span.heading-primary--main Outdoors
+          span.heading-primary--sub is where life happens
+        a.btn.btn--white.btn--animated(href="/overview") Discover our tours
+    main
+      section.section-about
+        .u-center-text.u-margin-bottom-big
+          h2.heading-secondary
+            | Exciting tours for adventurous people
+        .row
+          .col-1-of-2
+            h3.heading-tertiary.u-margin-bottom-small You&apos;re going to fall in love with nature
+            p.paragraph Are you the type to adore nature? Then what are you waiting for? we provide some of the best tours around. from the bottom of the sea to the top of the mountain. By adventours you will never miss the nature for a second
+            h3.heading-tertiary.u-margin-bottom-small Live adventures like you never have before
+            p.paragraph Our activities range from riding bikes in forests to skaying on ice mountains. you will always feel a rush with us.
+          .col-1-of-2
+            .composition
+              img(src="/img/tours/tour-1-1.jpg" alt="Photo 1" class="composition__photo composition__photo--p1")
+              img(src="/img/tours/tour-3-1.jpg" alt="Photo 2" class="composition__photo composition__photo--p2")
+              img(src="/img/tours/tour-2-1.jpg" alt="Photo 3" class="composition__photo composition__photo--p3")
+      section.section-features
+        .row
+          .col-1-of-4
+            .feature-box
+              i(class="feature-box__icon icon-basic-world")
+              h3.heading-tertiary.u-margin-bottom-small Explore the world
+              p(class="feature-box__text")
+                | We provide tours all around the world! Our tours cover more than 30 country from 5 different continents.
+          .col-1-of-4
+            .feature-box
+              i(class="feature-box__icon icon-basic-compass")
+              h3.heading-tertiary.u-margin-bottom-small Meet nature
+              p(class="feature-box__text")
+                | Become one with nature. relax and discover things that you will only see once in a lifetime.
+          .col-1-of-4
+            .feature-box
+              i(class="feature-box__icon icon-basic-map")
+              h3.heading-tertiary.u-margin-bottom-small Find your way
+              p(class="feature-box__text")
+                | Get rid of the boring lifestyle now. no more routine, no more work. just pure enjoyment.
+          .col-1-of-4
+            .feature-box
+              i(class="feature-box__icon icon-basic-heart")
+              h3.heading-tertiary.u-margin-bottom-small Live a healthier life
+              p(class="feature-box__text")
+                | Get rid of all life's pressures and hardships and just get away with us. feel refreshed and happy now!
+
+      section.section-stories
+        .bg-video
+          video(class="bg-video__content", autoplay, muted, loop)
+            source(src="/img/video.mp4" type="video/mp4")
+            source(src="/img/video.webm" type="video/webm")
+            | Your browser is not supported!
+        .u-center-text.u-margin-bottom-big
+          h2.heading-secondary
+            | We make people genuinely happy
+        .row
+          .story
+            figure(class="story__shape")
+              img(src="/img/users/user-2.jpg" alt="Person on a tour" class="story__img")
+              figcaption(class="story__caption") Mary Smith
+            div(class="story__text")
+              h3.heading-tertiary.u-margin-bottom-small I had the best week ever with my family
+              p
+                | We had the most remarkable family tour with Adventours Travels. Not only everything was perfect, but we felt, in every instance, that our guides and our gulet crew truly cared about us, both the kids and adults,
+        .row
+          .story
+            figure(class="story__shape")
+              img(src="/img/users/user-5.jpg" alt="Person on a tour" class="story__img")
+              figcaption(class="story__caption") Jack Wilson
+            div(class="story__text")
+              h3.heading-tertiary.u-margin-bottom-small WOW! My life is completely different now
+              p
+                | The holiday of a life time - our gulet adventure in the Dodecanese Greek Islands was without a doubt our favourite family trip. The comfort and beauty of the gulet, the incredibly caring crew, the delicious food, the history we learned from our competent and friendly leader, along with the stunning beauty of the islands. 
+        .u-center-text.u-margin-top-huge
+          a.btn-text(href="/overview") Discover our tours
+
+    footer.footer
+      div(class="footer__logo-box")
+        img(src="/img/logo-white.png" alt="Full logo" class="footer__logo")
+      .row
+        .col-1-of-2
+          div(class="footer__navigation")
+            ul(class="footer__list")
+              li(class="footer__item")
+                a(href="#" class="footer__link") Company
+              li(class="footer__item")
+                a(href="#" class="footer__link") Contact us
+              li(class="footer__item")
+                a(href="#" class="footer__link") Carrers
+              li(class="footer__item")
+                a(href="#" class="footer__link") Privacy policy
+              li(class="footer__item")
+                a(href="#" class="footer__link") Terms
+        .col-1-of-2
+          p(class="footer__copyright")
+
+            | Copyright &copy; all rights reserved 2023

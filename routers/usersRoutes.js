@@ -20,10 +20,7 @@ router.patch(
 router.patch('/update-password', authController.updatePassword);
 router.delete('/delete-me', userController.deleteMe);
 router.use(authController.restrictTo(['admin']));
-router
-  .route('/')
-  .get(userController.getAllUsers)
-  .delete(userController.deleteAllUsers);
+router.route('/').get(userController.getAllUsers);
 router
   .route('/:id')
   .get(userController.getUser)

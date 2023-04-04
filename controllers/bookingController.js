@@ -46,7 +46,7 @@ exports.createBookingDataEdit = catchAsync(async (req, res, next) => {
   const tour = await Tour.findOne({ slug: req.body.tour });
   if (!tour) return next(new AppError('No tour was found with this name', 404));
   req.body.tour = tour.id;
-  const user = await User.findOne({ name: req.body.user });
+  const user = await User.findOne({ email: req.body.user });
   if (!user) return next(new AppError('No user was found with this name', 404));
   req.body.user = user.id;
   if (req.body.paid) req.body.paid = true;

@@ -70,6 +70,11 @@ exports.createTour = (req, res, next) => {
     title: 'Create Tour',
   });
 };
+exports.getHome = (req, res, next) => {
+  res.status(200).render('landing-page', {
+    title: 'Adventours',
+  });
+};
 exports.getMyTours = catchAsync(async (req, res, next) => {
   // 1) Find all bookings
   const bookings = await Booking.find({ user: req.user.id });

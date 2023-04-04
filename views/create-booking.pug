@@ -11,7 +11,7 @@ block content
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +navItem('#', 'Settings', 'settings')
+          +navItem('/me', 'Settings', 'settings')
           +navItem('/my-bookings', 'My bookings', 'briefcase')
           +navItem('/my-reviews', 'My reviews', 'star')
           +navItem('#', 'Billing', 'credit-card')
@@ -30,8 +30,8 @@ block content
           h2.heading-secondary.ma-bt-md Your account settings
           form.form.form--create-booking
             .form__group
-              label.form__label(for='user') User Name
-              input#user.form__input(type='text' placeholder='User Name' required='required')
+              label.form__label(for='user') User Email
+              input#user.form__input(type='email' placeholder='example@adven.com' required='required')
             .form__group.ma-bt-md
               label.form__label(for='tour') Tour Name (slug)
               input#tour.form__input(type='text' placeholder='the-forest-hiker' required='required')
