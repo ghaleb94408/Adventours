@@ -13002,13 +13002,15 @@ if (editTourForm) editTourForm.addEventListener('submit', /*#__PURE__*/function 
           form.append('startDates', JSON.stringify(data.startDates));
           form.append('startLocation', JSON.stringify(data.startLocation));
           form.append('locations', JSON.stringify(data.locations));
-          imagesForm.append('imageCover', data.imageCover);
-          imagesForm.append('image_1', data.images[0]);
-          imagesForm.append('image_2', data.images[1]);
-          imagesForm.append('image_3', data.images[2]);
-          _context4.next = 36;
+          if (data.imageCover) imagesForm.append('imageCover', data.imageCover);
+          if (data.images) {
+            imagesForm.append('image_1', data.images[0]);
+            imagesForm.append('image_2', data.images[1]);
+            imagesForm.append('image_3', data.images[2]);
+          }
+          _context4.next = 34;
           return (0, _manageTours.editTour)(form, imagesForm, editTourForm.dataset.id);
-        case 36:
+        case 34:
         case "end":
           return _context4.stop();
       }

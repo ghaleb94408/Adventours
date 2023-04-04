@@ -231,10 +231,12 @@ if (editTourForm)
     form.append('startDates', JSON.stringify(data.startDates));
     form.append('startLocation', JSON.stringify(data.startLocation));
     form.append('locations', JSON.stringify(data.locations));
-    imagesForm.append('imageCover', data.imageCover);
-    imagesForm.append('image_1', data.images[0]);
-    imagesForm.append('image_2', data.images[1]);
-    imagesForm.append('image_3', data.images[2]);
+    if (data.imageCover) imagesForm.append('imageCover', data.imageCover);
+    if (data.images) {
+      imagesForm.append('image_1', data.images[0]);
+      imagesForm.append('image_2', data.images[1]);
+      imagesForm.append('image_3', data.images[2]);
+    }
     await editTour(form, imagesForm, editTourForm.dataset.id);
   });
 // for user management page
