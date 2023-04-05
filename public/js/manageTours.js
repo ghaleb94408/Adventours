@@ -34,7 +34,7 @@ export const editTour = async (data, imagesData, id) => {
       imagesData
     );
     if (result.data.status === 'Success') {
-      showAlert('success', 'Tour Created Successfully!');
+      showAlert('success', 'Tour Edited Successfully!');
       window.setTimeout(() => {
         location.assign(`/tours/${result.data.data.slug}`);
       }, 1000);

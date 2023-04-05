@@ -5,20 +5,8 @@ const AppError = require('../utility/appError');
 const catchAsync = require('../utility/catchAsync');
 const factory = require('./handlerFactory');
 
-// 1) Create name and destination for image uploads
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/img/users');
-//   },
-//   filename: (req, file, cb) => {
-//     // file name will be user-user_id-TimeStamp
-//     const ext = file.mimetype.split('/')[1];
-//     const fileName = `user-${req.user._id}-${Date.now()}.${ext}`;
-//     cb(null, fileName);
-//   },
-// });
 const multerStorage = multer.memoryStorage();
-// 2) create filter for uploaded files
+// 1) create filter for uploaded files
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
     cb(null, true);
@@ -26,7 +14,7 @@ const multerFilter = (req, file, cb) => {
     cb(new AppError('Not an image. Please upload images only', 400), false);
   }
 };
-// 3) Create the upload middleware
+// 2) Create the upload middleware
 const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,

@@ -124,7 +124,6 @@ exports.editBooking = catchAsync(async (req, res, next) => {
 });
 exports.getMyReviews = catchAsync(async (req, res, next) => {
   const reviews = await Review.find({ user: req.user.id });
-  console.log(!reviews[0]);
   if (!reviews[0]) return next(new AppError('You have not reviewed any tour'));
   res.status(200).render('my-reviews', {
     title: 'My Reviews',

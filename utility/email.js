@@ -2,11 +2,6 @@ const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
 
-// transporter.verify((err, success) => {
-//   if (err) console.error(err);
-//   else if (success) console.log(success);
-//   else console.log('Your config is correct');
-// });
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
@@ -26,6 +21,7 @@ module.exports = class Email {
         },
       });
       return nodemailer.createTransport(transporter);
+      // In case of sendGrid transporter
       // return nodemailer.createTransport({
       //   service: 'SendGrid',
       //   auth: {
@@ -81,23 +77,3 @@ module.exports = class Email {
     );
   }
 };
-// const sendEmail = async (options) => {
-// 1) Create transporter
-// const transporter = nodemailer.createTransport({
-//   host: process.env.EMAIL_HOST,
-//   port: process.env.EMAIL_PORT,
-//   auth: {
-//     user: process.env.EMAIL_USERNAME,
-//     pass: process.env.EMAIL_PASSWORD,
-//   },
-// });
-// 2) Define email options
-// const mailOptions = {
-//   from: 'Adventours <sender@server.com>',
-//   to: options.email,
-//   subject: options.subject,
-//   text: options.text,
-// };
-// // 3) Send email
-// await transporter.sendMail(message);
-// };
