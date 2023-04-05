@@ -5,7 +5,7 @@ export const login = async (email, password) => {
   try {
     const result = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/v1/users/login',
+      url: '/api/v1/users/login',
       data: {
         email,
         password,
@@ -25,7 +25,7 @@ export const signup = async (data) => {
   try {
     const result = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/v1/users/signup',
+      url: '/api/v1/users/signup',
       data,
     });
     if (result.data.status === 'Success') {
@@ -42,7 +42,7 @@ export const logout = async () => {
   try {
     const result = await axios({
       method: 'Get',
-      url: 'http://127.0.0.1:8000/api/v1/users/logout',
+      url: '/api/v1/users/logout',
     });
     if (result.data.status === 'Success') {
       showAlert('success', 'Logged out successfully!');

@@ -5,11 +5,11 @@ export const createTour = async (data, imagesData) => {
   try {
     const result = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/v1/tours',
+      url: '/api/v1/tours',
       data: formToJSON(data),
     });
     const imgUploadResult = await axios.patch(
-      `http://127.0.0.1:8000/api/v1/tours/${result.data.data.id}`,
+      `/api/v1/tours/${result.data.data.id}`,
       imagesData
     );
     if (result.data.status === 'Success') {
@@ -26,11 +26,11 @@ export const editTour = async (data, imagesData, id) => {
   try {
     const result = await axios({
       method: 'PATCH',
-      url: `http://127.0.0.1:8000/api/v1/tours/${id}`,
+      url: `/api/v1/tours/${id}`,
       data: formToJSON(data),
     });
     const imgUploadResult = await axios.patch(
-      `http://127.0.0.1:8000/api/v1/tours/${id}`,
+      `/api/v1/tours/${id}`,
       imagesData
     );
     if (result.data.status === 'Success') {
@@ -46,7 +46,7 @@ export const editTour = async (data, imagesData, id) => {
 export const deleteTour = async (id) => {
   try {
     const result = await axios.delete(
-      `http://127.0.0.1:8000/api/v1/tours/${id}`
+      `/api/v1/tours/${id}`
     );
     if (result.status === 204) {
       showAlert('success', 'Tour Deleted Successfully!');

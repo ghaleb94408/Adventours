@@ -327,7 +327,6 @@ if (createBookingForm)
       price: document.getElementById('price').value,
       paid: document.getElementById('paid').value,
     };
-    console.log(data);
     createBooking(data);
   });
 if (deleteBooking)
@@ -366,7 +365,6 @@ if (editBookingForm)
 if (deleteReview)
   deleteReview.forEach((de) => {
     de.addEventListener('click', (e) => {
-      console.log('hello');
       deleteReviewBtn.dataset.id = de.dataset.id;
       confirmDelete.classList.remove('hidden');
       overlay.classList.remove('hidden');

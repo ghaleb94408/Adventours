@@ -79,15 +79,12 @@ reviewSchema.post('save', function () {
   this.constructor.calcAverageRatings(this.tour);
 });
 reviewSchema.pre(/^findOneAnd/, async function (next) {
-  console.log(this);
   this.rev = await this.clone().findOne();
   if (!this.rev)
     return next(new AppError('No review was found to delete', 404));
-  console.log(this.rev);
   next();
 });
 reviewSchema.post(/^findOneAnd/, async function () {
-  console.log(this.rev);
   await this.rev.constructor.calcAverageRatings(this.rev.tour);
 });
 const Review = mongoose.model('Review', reviewSchema);

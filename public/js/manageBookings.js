@@ -6,7 +6,7 @@ export const createBooking = async (data) => {
   try {
     const result = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:8000/api/v1/bookings/create-booking',
+      url: '/api/v1/bookings/create-booking',
       data: data,
     });
     if (result.data.status === 'Success') {
@@ -22,7 +22,7 @@ export const createBooking = async (data) => {
 export const crossBooking = async (id) => {
   try {
     const result = await axios.delete(
-      `http://127.0.0.1:8000/api/v1/bookings/${id}`
+      `/api/v1/bookings/${id}`
     );
     if (result) showAlert('success', 'Booking deleted succcessfully');
   } catch (err) {
@@ -32,7 +32,7 @@ export const crossBooking = async (id) => {
 export const updateBooking = async (id, data) => {
   try {
     const result = await axios.patch(
-      `http://127.0.0.1:8000/api/v1/bookings/edit-booking/${id}`,
+      `/api/v1/bookings/edit-booking/${id}`,
       data
     );
     if (result.data.status === 'Success') {
