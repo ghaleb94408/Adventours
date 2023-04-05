@@ -5,11 +5,12 @@ const bookingCotroller = require('../controllers/bookingController');
 
 const router = express.Router();
 router.get(
-  '/overview',
-  bookingCotroller.createBookingCheckout,
+  '/',
   authController.isLoggedIn,
-  viewController.getOverview
+  bookingCotroller.createBookingCheckout,
+  viewController.getHome
 );
+router.get('/overview', authController.isLoggedIn, viewController.getOverview);
 router.get('/tours/:slug', authController.isLoggedIn, viewController.getTour);
 router.get('/login', viewController.login);
 router.get('/signup', viewController.signup);
@@ -64,7 +65,6 @@ router.get(
   viewController.editBooking
 );
 router.get('/my-reviews', authController.protect, viewController.getMyReviews);
-router.get('/', viewController.getHome);
 router.get(
   '/my-reviews/:id',
   authController.protect,

@@ -80,6 +80,7 @@ if (createTourForm)
     const imagesForm = new FormData();
     data.name = document.getElementById('name').value;
     data.price = document.getElementById('price').value;
+    data.priceId = document.getElementById('price_id').value;
     data.duration = document.getElementById('duration').value;
     data.maxGroupSize = document.getElementById('max_group_size').value;
     data.difficulty = document.getElementById('difficulty').value;
@@ -132,6 +133,7 @@ if (createTourForm)
     ];
     form.append('name', data.name);
     form.append('price', data.price);
+    form.append('priceId', data.priceId);
     form.append('duration', data.duration);
     form.append('maxGroupSize', data.maxGroupSize);
     form.append('difficulty', data.difficulty);
@@ -171,6 +173,7 @@ if (editTourForm)
     const imagesForm = new FormData();
     data.name = document.getElementById('name').value;
     data.price = document.getElementById('price').value;
+    data.priceId = document.getElementById('price_id').value;
     data.duration = document.getElementById('duration').value;
     data.maxGroupSize = document.getElementById('max_group_size').value;
     data.difficulty = document.getElementById('difficulty').value;
@@ -223,6 +226,7 @@ if (editTourForm)
     ];
     form.append('name', data.name);
     form.append('price', data.price);
+    form.append('priceId', data.priceId);
     form.append('duration', data.duration);
     form.append('maxGroupSize', data.maxGroupSize);
     form.append('difficulty', data.difficulty);

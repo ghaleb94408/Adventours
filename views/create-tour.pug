@@ -3,7 +3,7 @@ mixin navItem(link, text, icon, active)
   li(class=`${active ? 'side-nav--active' : ''}`)
     a(href=`${link}`)
       svg
-        use(xlink:href=`img/icons.svg#icon-${icon}`)
+        use(xlink:href=`/img/icons.svg#icon-${icon}`)
       | #{text} 
 
 block content
@@ -42,6 +42,9 @@ block content
             .form__group.ma-bt-md
               label.form__label(for='price') Price
               input#price.form__input(type='number' placeholder='999' required='required')
+            .form__group.ma-bt-md
+              label.form__label(for='price_id') Price Id from Stripe
+              input#price_id.form__input(type='text' placeholder='price_1Mq1U4GBjBj74gbs8is0Q23o')
             .form__group.ma-bt-md
               .custom-select(style='width: 200px')
                 label.form__label(for='difficulty') Select Difficulty

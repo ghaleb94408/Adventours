@@ -44,6 +44,10 @@ const tourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Tour must have a price'],
     },
+    priceId: {
+      type: String,
+      default: 'price_1Mq1U4GBjBj74gbs8is0Q23o',
+    },
     summary: {
       type: String,
       maxLength: [120, 'Summary must be less than 120 charcters'],

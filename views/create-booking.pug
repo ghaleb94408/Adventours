@@ -3,7 +3,7 @@ mixin navItem(link, text, icon, active)
   li(class=`${active ? 'side-nav--active' : ''}`)
     a(href=`${link}`)
       svg
-        use(xlink:href=`img/icons.svg#icon-${icon}`)
+        use(xlink:href=`/img/icons.svg#icon-${icon}`)
       | #{text} 
 
 block content
@@ -28,7 +28,7 @@ block content
 
       .user-view__content
         .user-view__form-container
-          h2.heading-secondary.ma-bt-md Your account settings
+          h2.heading-secondary.ma-bt-md Create Booking
           form.form.form--create-booking
             .form__group
               label.form__label(for='user') User Email

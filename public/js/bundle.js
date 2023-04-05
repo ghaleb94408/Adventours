@@ -12450,7 +12450,7 @@ var bookTour = /*#__PURE__*/function () {
           _context.prev = 8;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0);
-          (0, _alerts.showAlert)('error', _context.t0);
+          (0, _alerts.showAlert)('error', _context.t0.response.data.message);
         case 12:
         case "end":
           return _context.stop();
@@ -12866,6 +12866,7 @@ if (createTourForm) createTourForm.addEventListener('submit', /*#__PURE__*/funct
           imagesForm = new FormData();
           data.name = document.getElementById('name').value;
           data.price = document.getElementById('price').value;
+          data.priceId = document.getElementById('price_id').value;
           data.duration = document.getElementById('duration').value;
           data.maxGroupSize = document.getElementById('max_group_size').value;
           data.difficulty = document.getElementById('difficulty').value;
@@ -12897,6 +12898,7 @@ if (createTourForm) createTourForm.addEventListener('submit', /*#__PURE__*/funct
           data.images = [document.getElementById('image_1').files[0], document.getElementById('image_2').files[0], document.getElementById('image_3').files[0]];
           form.append('name', data.name);
           form.append('price', data.price);
+          form.append('priceId', data.priceId);
           form.append('duration', data.duration);
           form.append('maxGroupSize', data.maxGroupSize);
           form.append('difficulty', data.difficulty);
@@ -12910,9 +12912,9 @@ if (createTourForm) createTourForm.addEventListener('submit', /*#__PURE__*/funct
           imagesForm.append('image_1', data.images[0]);
           imagesForm.append('image_2', data.images[1]);
           imagesForm.append('image_3', data.images[2]);
-          _context2.next = 36;
+          _context2.next = 38;
           return (0, _manageTours.createTour)(form, imagesForm);
-        case 36:
+        case 38:
         case "end":
           return _context2.stop();
       }
@@ -12963,6 +12965,7 @@ if (editTourForm) editTourForm.addEventListener('submit', /*#__PURE__*/function 
           imagesForm = new FormData();
           data.name = document.getElementById('name').value;
           data.price = document.getElementById('price').value;
+          data.priceId = document.getElementById('price_id').value;
           data.duration = document.getElementById('duration').value;
           data.maxGroupSize = document.getElementById('max_group_size').value;
           data.difficulty = document.getElementById('difficulty').value;
@@ -12994,6 +12997,7 @@ if (editTourForm) editTourForm.addEventListener('submit', /*#__PURE__*/function 
           data.images = [document.getElementById('image_1').files[0], document.getElementById('image_2').files[0], document.getElementById('image_3').files[0]];
           form.append('name', data.name);
           form.append('price', data.price);
+          form.append('priceId', data.priceId);
           form.append('duration', data.duration);
           form.append('maxGroupSize', data.maxGroupSize);
           form.append('difficulty', data.difficulty);
@@ -13008,9 +13012,9 @@ if (editTourForm) editTourForm.addEventListener('submit', /*#__PURE__*/function 
             imagesForm.append('image_2', data.images[1]);
             imagesForm.append('image_3', data.images[2]);
           }
-          _context4.next = 34;
+          _context4.next = 36;
           return (0, _manageTours.editTour)(form, imagesForm, editTourForm.dataset.id);
-        case 34:
+        case 36:
         case "end":
           return _context4.stop();
       }
@@ -13437,7 +13441,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64639" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51379" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
