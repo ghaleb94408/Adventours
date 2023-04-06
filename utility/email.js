@@ -11,36 +11,36 @@ module.exports = class Email {
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'production') {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.mailgun.org',
-        port: 587,
-        auth: {
-          user: process.env.MAILGUN_USER,
-          pass: process.env.MAILGUN_PASSWORD,
-        },
-      });
-      return nodemailer.createTransport(transporter);
-      // In case of sendGrid transporter
-      // return nodemailer.createTransport({
-      //   service: 'SendGrid',
-      //   auth: {
-      //     user: process.env.SENDGRID_USERNAME,
-      //     pass: process.env.SENDGRID_PASSWORD,
-      //   },
-      // });
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   const transporter = nodemailer.createTransport({
+    //     host: 'smtp.mailgun.org',
+    //     port: 587,
+    //     auth: {
+    //       user: process.env.MAILGUN_USER,
+    //       pass: process.env.MAILGUN_PASSWORD,
+    //     },
+    //   });
+    //   return nodemailer.createTransport(transporter);
+    // In case of sendGrid transporter
+    // return nodemailer.createTransport({
+    //   service: 'SendGrid',
+    //   auth: {
+    //     user: process.env.SENDGRID_USERNAME,
+    //     pass: process.env.SENDGRID_PASSWORD,
+    //   },
+    // });
+    // }
 
-    if (process.env.NODE_ENV === 'development') {
-      return nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
-        auth: {
-          user: process.env.EMAIL_USERNAME,
-          pass: process.env.EMAIL_PASSWORD,
-        },
-      });
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    return nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+    // }
   }
 
   async send(template, subject) {
