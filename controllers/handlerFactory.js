@@ -22,12 +22,12 @@ exports.getAll = (Model, popOptions) =>
       .limitFields()
       .paginate();
     if (popOptions) features.query.populate(popOptions);
-    const tours = await features.query;
+    const documents = await features.query;
     // response
     res.status(200).json({
       status: 'success',
-      results: tours.length,
-      tours,
+      results: documents.length,
+      documents,
     });
   });
 exports.getOne = (Model, popOptions) =>
